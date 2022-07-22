@@ -32,7 +32,7 @@ while True:
   # poster download
   try:
     posterfn = "/" + site + "/" + doc['id'] + os.path.splitext(urlparse(doc['posterurl']).path)[1]
-    print(doc['posterurl'])
+    #print(doc['posterurl'])
     if not os.path.exists(imagestore + posterfn):
       request.urlretrieve(doc['posterurl'], imagestore + posterfn)
       doc['posterlocation'] = posterfn
