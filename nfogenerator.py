@@ -1,5 +1,4 @@
 from pymongo import MongoClient
-from bson import ObjectId
 import sys
 import os
 from lxml import etree as ET

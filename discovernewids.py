@@ -5,7 +5,6 @@ from urllib.parse import urlparse
 import json
 from pymongo import MongoClient
 from pprint import pprint
-import time
 
 ### SITE CONFIG ###
 sites = [
@@ -123,7 +122,7 @@ sites = [
 #   "countNextPage": False,
 #   "collection": "brazzers",
 #   "channel": "mommygotboobs"
-},
+# },
 # {
 #   "baseUrl": "https://www.brazzers.com/videos/page/1",
 #   "resultSearchPattern": "//div[@aria-atomic = 'true']//span/a",

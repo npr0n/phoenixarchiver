@@ -3,7 +3,9 @@ from selenium.webdriver.common.by import By
 from selenium.common.exceptions import NoSuchElementException
 from selenium.common.exceptions import TimeoutException
 from urllib.parse import urlparse
+from urllib import request
 import json
+import os
 from pymongo import MongoClient
 from bson import ObjectId
 import time
@@ -15,7 +17,7 @@ kinksites = [
 ]
 
 vixensites = [
-# "vixen"
+ "vixen"
 ]
 
 mylfsites = [
@@ -23,7 +25,7 @@ mylfsites = [
 ]
 
 devilsfilmsites = [
- "devilsfilm"
+# "devilsfilm"
 ]
 
 genderxsites = [
@@ -54,6 +56,9 @@ updatemaxnumber = 100
 # mongodb connection
 client = MongoClient("mongodb://phoenixinserter:phoenix@localhost:27017/phoenixarchive")
 db = client.phoenixarchive
+
+# directory for saved images
+imagestore = "/mnt/naspool/media/porn/db-imagestore"
 
 ### KINK ################################################################
 for site in kinksites:
@@ -192,7 +197,7 @@ for site in vixensites:
   # for number in range(updatemaxnumber):
   while True:
     try:
-      doc = collection.find_one({"title": {"$exists": False}})
+      doc = collection.find_one({"posterlocation": {"$exists": False}})
       print(doc['_id'])
     except:
       print("Did not find dataset without title.")
@@ -249,8 +254,16 @@ for site in vixensites:
     # poster url
     for attempt in range(findmaxtries):
       try:
-        doc['posterurl'] = driver.find_element(By.XPATH, "//picture[@data-test-component= 'ProgressiveImageImage']/img").get_attribute("src")
-      except NoSuchElementException:
+        posterurl = driver.find_element(By.XPATH, "//picture[@data-test-component= 'ProgressiveImageImage']/img").get_attribute("src")
+        posterfn = "/vixen/" + doc['id'] + os.path.splitext(urlparse(posterurl).path)[1]
+        if not os.path.exists(imagestore + posterfn):
+          request.urlretrieve(posterurl, imagestore + posterfn)
+          doc['posterlocation'] = posterfn
+          break
+        else:
+          doc['posterlocation'] = posterfn
+          continue
+      except:
         continue
       else:
         break
