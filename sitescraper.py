@@ -136,7 +136,10 @@ for site in kinksites:
       try:
         doc['posterurl'] = driver.find_element(By.XPATH, "//video[@class= 'vjs-tech']").get_attribute("poster")
       except NoSuchElementException:
-        continue
+        try:
+          doc['posterurl'] = driver.find_element(By.XPATH, "//div[@class= 'player']/img").get_attribute("src")
+        except:
+          continue
       else:
         break
 
