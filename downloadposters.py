@@ -43,4 +43,4 @@ while True:
     collection.update_one(filter, { '$set': doc })
 
   except:
-    break
+    continue
