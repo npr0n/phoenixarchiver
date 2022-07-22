@@ -63,6 +63,9 @@ updatemaxnumber = 100
 client = MongoClient("mongodb://phoenixinserter:phoenix@localhost:27017/phoenixarchive")
 db = client.phoenixarchive
 
+# directory for saved images
+imagestore = "/mnt/naspool/media/porn/db-imagestore"
+
 ### KINK ################################################################
 for site in kinksites:
   collection = db[site]
@@ -133,6 +136,20 @@ for site in kinksites:
         continue
       else:
         break
+
+    # poster download
+    for attempt in range(findmaxtries):
+      try:
+        posterfn = "/kink/" + doc['id'] + os.path.splitext(urlparse(doc['posterurl']).path)[1]
+        if not os.path.exists(imagestore + posterfn):
+          request.urlretrieve(doc['posterurl'], imagestore + posterfn)
+          doc['posterlocation'] = posterfn
+          break
+        else:
+          doc['posterlocation'] = posterfn
+          continue
+      except:
+        continue
         
     # channel
     for attempt in range(findmaxtries):
@@ -254,14 +271,20 @@ for site in vixensites:
     except:
       pass
         
-    # poster url
+    # poster download
     for attempt in range(findmaxtries):
       try:
-        doc['posterurl'] = driver.find_element(By.XPATH, "//picture[@data-test-component= 'ProgressiveImageImage']/img").get_attribute("src")
-      except NoSuchElementException:
+        posterurl = driver.find_element(By.XPATH, "//picture[@data-test-component= 'ProgressiveImageImage']/img").get_attribute("src")
+        posterfn = "/vixen/" + doc['id'] + os.path.splitext(urlparse(posterurl).path)[1]
+        if not os.path.exists(imagestore + posterfn):
+          request.urlretrieve(posterurl, imagestore + posterfn)
+          doc['posterlocation'] = posterfn
+          break
+        else:
+          doc['posterlocation'] = posterfn
+          continue
+      except:
         continue
-      else:
-        break
         
     # channel
     for attempt in range(findmaxtries):
