@@ -66,14 +66,14 @@ sites = [
 #   "nextPageSearchPattern": "//a[@data-test-component= 'PaginationNext']",
 #   "collection": "vixen"
 # },
-{
-  "baseUrl": "https://www.devilsfilm.com/en/videos/page/1",
-  "resultSearchPattern": "//a[contains(@class, 'SceneThumb-SceneInfo-SceneTitle-Link')]",
-  "countNextPage": True,
-  "collection": "devilsfilm",
-  "channelSearchPattern": "../../..//a[contains(@class, 'SceneDetail-ChannelName-Link')]",
-  "ratingSearchPattern": "../../..//span[contains(@class, 'SceneDetail-RatingPercentage-Text')]"
-},
+# {
+#   "baseUrl": "https://www.devilsfilm.com/en/videos/page/1",
+#   "resultSearchPattern": "//a[contains(@class, 'SceneThumb-SceneInfo-SceneTitle-Link')]",
+#   "countNextPage": True,
+#   "collection": "devilsfilm",
+#   "channelSearchPattern": "../../..//a[contains(@class, 'SceneDetail-ChannelName-Link')]",
+#   "ratingSearchPattern": "../../..//span[contains(@class, 'SceneDetail-RatingPercentage-Text')]"
+# },
 # {
 #   "baseUrl": "https://www.genderxfilms.com/en/videos",
 #   "resultSearchPattern": "//a[contains(@class, 'imgLink')]",
@@ -138,7 +138,15 @@ sites = [
 #   "resultSearchPattern": "//a[contains(@class, 'SceneThumb-SceneInfo-SceneTitle-Link')]",
 #   "countNextPage": True,
 #   "collection": "wicked"
-# }
+# },
+{
+  "baseUrl": "https://bangbros.com/videos/1",
+  "resultSearchPattern": "//a[contains(@class, 'thmb_lnk')]",
+  "nextPageSearchPattern": "//a[@id= 'pagination_btn_next']",
+  "collection": "bangbros",
+  "channelSearchPattern": "..//a[contains(@class, 'thmb_mr_lnk')]",
+  "dateSearchPattern": "..//span[contains(@class, thmb_mr_2)]/span[contains(@class, 'faTxt')]"
+}
 ]
 
 
@@ -155,7 +163,7 @@ driver.implicitly_wait(3)
 client = MongoClient("mongodb://phoenixinserter:phoenix@localhost:27017/phoenixarchive")
 db = client.phoenixarchive
 
-maxPage = 3
+maxPage = 300
 
 # ids = [urlparse(link).path.rpartition('/')[-1] for link in links]
 
@@ -195,6 +203,11 @@ for site in sites:
         
         try:
           result['rating'] = elem.find_element(By.XPATH, site['ratingSearchPattern']).get_attribute('textContent')
+        except:
+          pass
+        
+        try:
+          result['datesite'] = elem.find_element(By.XPATH, site['dateSearchPattern']).get_attribute('textContent')
         except:
           pass
         
