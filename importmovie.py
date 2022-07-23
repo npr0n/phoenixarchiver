@@ -265,7 +265,7 @@ for rootdir, subdirs, files in os.walk(importdir):
 #########################################################
       # create new folder name
       try:
-        removethese = [":",";","!","/","\\"]
+        removethese = [":",";","!","/","\\","'",'"']
         underscorethese = [".", " "]
         newfoldername = doc['title']
         for i in underscorethese:
