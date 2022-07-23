@@ -139,13 +139,22 @@ sites = [
 #   "countNextPage": True,
 #   "collection": "wicked"
 # },
+# {
+#   "baseUrl": "https://bangbros.com/videos/1",
+#   "resultSearchPattern": "//a[contains(@class, 'thmb_lnk')]",
+#   "nextPageSearchPattern": "//a[@id= 'pagination_btn_next']",
+#   "collection": "bangbros",
+#   "channelSearchPattern": "..//a[contains(@class, 'thmb_mr_lnk')]",
+#   "dateSearchPattern": "..//span[contains(@class, 'thmb_mr_2')]/span[contains(@class, 'faTxt')]"
+# },
 {
-  "baseUrl": "https://bangbros.com/videos/1",
-  "resultSearchPattern": "//a[contains(@class, 'thmb_lnk')]",
-  "nextPageSearchPattern": "//a[@id= 'pagination_btn_next']",
-  "collection": "bangbros",
-  "channelSearchPattern": "..//a[contains(@class, 'thmb_mr_lnk')]",
-  "dateSearchPattern": "..//span[contains(@class, thmb_mr_2)]/span[contains(@class, 'faTxt')]"
+  "baseUrl": "https://www.dpfanatics.com/en/videos/sort/latest/page/1",
+  "resultSearchPattern": "//a[contains(@class, 'SceneThumb-SceneInfo-SceneTitle-Link')]",
+  "nextPageSearchPattern": "//a[contains(@class, 'next-Link')]",
+  "collection": "adulttime",
+  "channelSearchPattern": "../../..//a[contains(@class, 'SceneDetail-ChannelName-Link')]",
+  "dateSearchPattern": "../../..//span[contains(@class, 'SceneDetail-DatePublished-Text')]",
+  "ratingSearchPattern": "../../..//span[contains(@class, 'SceneDetail-RatingPercentage-Text')]"
 }
 ]
 
@@ -163,7 +172,7 @@ driver.implicitly_wait(3)
 client = MongoClient("mongodb://phoenixinserter:phoenix@localhost:27017/phoenixarchive")
 db = client.phoenixarchive
 
-maxPage = 300
+maxPage = 13
 
 # ids = [urlparse(link).path.rpartition('/')[-1] for link in links]
 
@@ -197,7 +206,7 @@ for site in sites:
         result['url'] = elem.get_attribute('href')
         result['id'] = urlparse(result['url']).path.rpartition('/')[-1]
         try:
-          result['channel'] = elem.find_element(By.XPATH, site['channelSearchPattern']).get_attribute('textContent').lower().replace(' ','')
+          result['channel'] = elem.find_element(By.XPATH, site['channelSearchPattern']).get_attribute('textContent').lower().replace(' ','').replace(',','')
         except:
           pass
         
@@ -232,12 +241,13 @@ for site in sites:
           url = site['baseUrl'].rsplit('/', 1)[0] + "/" + str(currentPage)
           # print("Next page link was built:", url)
         elif (site['countNextPage'] is False):
-          print("Page counter explicitly disabled")
+          #print("Page counter explicitly disabled")
           break
         else:
           # print("No next page found")
           break
     except:
       break
+  #print("Searched:", site['collection'])
 
 driver.quit()
