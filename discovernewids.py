@@ -67,14 +67,6 @@ sites = [
 #   "collection": "vixen"
 # },
 # {
-#   "baseUrl": "https://www.devilsfilm.com/en/videos/page/1",
-#   "resultSearchPattern": "//a[contains(@class, 'SceneThumb-SceneInfo-SceneTitle-Link')]",
-#   "countNextPage": True,
-#   "collection": "devilsfilm",
-#   "channelSearchPattern": "../../..//a[contains(@class, 'SceneDetail-ChannelName-Link')]",
-#   "ratingSearchPattern": "../../..//span[contains(@class, 'SceneDetail-RatingPercentage-Text')]"
-# },
-# {
 #   "baseUrl": "https://www.genderxfilms.com/en/videos",
 #   "resultSearchPattern": "//a[contains(@class, 'imgLink')]",
 #   "nextPageSearchPattern": "//a[@aria-label= 'Next']",
@@ -147,15 +139,42 @@ sites = [
 #   "channelSearchPattern": "..//a[contains(@class, 'thmb_mr_lnk')]",
 #   "dateSearchPattern": "..//span[contains(@class, 'thmb_mr_2')]/span[contains(@class, 'faTxt')]"
 # },
+# {
+#   "baseUrl": "https://www.devilsfilm.com/en/videos/sort/latest/page/1",
+#   "resultSearchPattern": "//a[contains(@class, 'SceneThumb-SceneInfo-SceneTitle-Link')]",
+#   "nextPageSearchPattern": "//a[contains(@class, 'next-Link')]",
+#   "collection": "adulttime",
+#   "channelSearchPattern": "../../..//a[contains(@class, 'SceneDetail-ChannelName-Link')]",
+#   "dateSearchPattern": "../../..//span[contains(@class, 'SceneDetail-DatePublished-Text')]",
+#   "ratingSearchPattern": "../../..//span[contains(@class, 'SceneDetail-RatingPercentage-Text')]"
+# },
+# {
+#   "baseUrl": "https://www.21sextury.com/en/videos/sort/latest/page/1",
+#   "resultSearchPattern": "//a[contains(@class, 'SceneThumb-SceneInfo-SceneTitle-Link')]",
+#   "nextPageSearchPattern": "//a[contains(@class, 'next-Link')]",
+#   "collection": "adulttime",
+#   "channelSearchPattern": "../../..//a[contains(@class, 'SceneDetail-ChannelName-Link')]",
+#   "dateSearchPattern": "../../..//span[contains(@class, 'SceneDetail-DatePublished-Text')]",
+#   "ratingSearchPattern": "../../..//span[contains(@class, 'SceneDetail-RatingPercentage-Text')]"
+# },
+# {
+#   "baseUrl": "https://www.transfixed.com/en/videos/page/1",
+#   "resultSearchPattern": "//a[contains(@class, 'SceneThumb-SceneInfo-SceneTitle-Link')]",
+#   "nextPageSearchPattern": "//a[contains(@class, 'next-Link')]",
+#   "collection": "adulttime",
+#   "channelSearchPattern": "../../..//a[contains(@class, 'SceneDetail-ChannelName-Link')]",
+#   "dateSearchPattern": "../../..//span[contains(@class, 'SceneDetail-DatePublished-Text')]",
+#   "ratingSearchPattern": "../../..//span[contains(@class, 'SceneDetail-RatingPercentage-Text')]"
+# },
 {
-  "baseUrl": "https://www.dpfanatics.com/en/videos/sort/latest/page/1",
+  "baseUrl": "https://www.agentredgirl.com/en/videos/page/1",
   "resultSearchPattern": "//a[contains(@class, 'SceneThumb-SceneInfo-SceneTitle-Link')]",
   "nextPageSearchPattern": "//a[contains(@class, 'next-Link')]",
   "collection": "adulttime",
   "channelSearchPattern": "../../..//a[contains(@class, 'SceneDetail-ChannelName-Link')]",
   "dateSearchPattern": "../../..//span[contains(@class, 'SceneDetail-DatePublished-Text')]",
   "ratingSearchPattern": "../../..//span[contains(@class, 'SceneDetail-RatingPercentage-Text')]"
-}
+},
 ]
 
 
@@ -172,7 +191,7 @@ driver.implicitly_wait(3)
 client = MongoClient("mongodb://phoenixinserter:phoenix@localhost:27017/phoenixarchive")
 db = client.phoenixarchive
 
-maxPage = 13
+maxPage = 180
 
 # ids = [urlparse(link).path.rpartition('/')[-1] for link in links]
 
@@ -206,7 +225,7 @@ for site in sites:
         result['url'] = elem.get_attribute('href')
         result['id'] = urlparse(result['url']).path.rpartition('/')[-1]
         try:
-          result['channel'] = elem.find_element(By.XPATH, site['channelSearchPattern']).get_attribute('textContent').lower().replace(' ','').replace(',','')
+          result['channel'] = elem.find_element(By.XPATH, site['channelSearchPattern']).get_attribute('textContent').lower().replace(' ','').replace(',','').replace("'",'')
         except:
           pass
         
@@ -222,7 +241,7 @@ for site in sites:
         
         # update / insert into database
         # print("upserting:", result['url'])
-        collection.update_one({"url": result['url']}, {"$set": result}, upsert=True)
+        collection.update_one({"id": result['id']}, {"$set": result}, upsert=True)
         
 
       # print("Found elements on current page:", len(elems))
@@ -233,18 +252,18 @@ for site in sites:
     try:
       try:
         nextPageLink = driver.find_element(By.XPATH, site['nextPageSearchPattern']).get_attribute('href')
-        # print("Next page link was found:", nextPageLink)
+        print("Next page link was found:", nextPageLink)
         url = nextPageLink
       except:
         if (site['countNextPage'] is True):
           currentPage += 1
           url = site['baseUrl'].rsplit('/', 1)[0] + "/" + str(currentPage)
-          # print("Next page link was built:", url)
+          print("Next page link was built:", url)
         elif (site['countNextPage'] is False):
-          #print("Page counter explicitly disabled")
+          print("Page counter explicitly disabled")
           break
         else:
-          # print("No next page found")
+          print("No next page found")
           break
     except:
       break
