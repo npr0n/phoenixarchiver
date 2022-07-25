@@ -6,16 +6,16 @@ db = client.phoenixarchive
 
 coll = db['mylf']
 
-# while True:
-#   try:
-#     doc = coll.find_one({"id": {"$exists": False}})
-#     print(doc['_id'])
-#     doc['id'] = urlparse(doc['url']).path.rsplit('/', 1)[-1]
-#     #doc['id_2'] = urlparse(doc['url']).path.rsplit('/', 2)[-2]
-#     coll.find_one_and_update({"_id": doc['_id']}, {"$set": doc})
-#   except:
-#     break
+while True:
+  try:
+    doc = coll.find_one({"id": {"$exists": False}})
+    print(doc['_id'])
+    doc['id'] = urlparse(doc['url']).path.rsplit('/', 1)[-1]
+    #doc['id_2'] = urlparse(doc['url']).path.rsplit('/', 2)[-2]
+    coll.find_one_and_update({"_id": doc['_id']}, {"$set": doc})
+  except:
+    break
 
 
-coll.update_many({}, {"$rename": {"category": "categories"}} )
+# coll.update_many({}, {"$rename": {"category": "categories"}} )
 
