@@ -25,8 +25,8 @@ mylfsites = [
 # "mylf"
 ]
 
-devilsfilmsites = [
-#  "devilsfilm"
+adulttimesites = [
+  "adulttime"
 ]
 
 genderxsites = [
@@ -50,7 +50,7 @@ wickedsites = [
 ]
 
 bangbrossites = [
-  "bangbros"
+#  "bangbros"
 ]
 
 ### GLOBAL ###
@@ -478,8 +478,8 @@ for site in mylfsites:
     break
     #time.sleep(3)
 
-### DEVILSFILM ##########################################################
-for site in devilsfilmsites:
+### ADULTTIME ###########################################################
+for site in adulttimesites:
   collection = db[site]
   print("Working on", site)
   # use maximum or while True
