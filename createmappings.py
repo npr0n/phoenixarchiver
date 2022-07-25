@@ -1,31 +1,34 @@
+from time import sleep
+from urllib.parse import urlparse
+from urllib import request
+import os
 from pymongo import MongoClient
+import sys
 
 client = MongoClient("mongodb://phoenixinserter:phoenix@localhost:27017/phoenixarchive")
 db = client.phoenixarchive
-mappings = db['mappings']
 
-kinksources = "30minutesoftorment boundgangbangs boundgods boundinpublic brutalsessions buttmachineboys devicebondage divinebitches electrosluts \
-everythingbutt familiestied filthyfemdom footworship fuckingmachines gangbang gaybondage gayfetish hardcoregangbang hogtied kink kinkclassics \
-kinkfeatures kinkmenclassics kinkuniversity kinkybites meninpain menonedge nakedkombat publicdisgrace sadisticrope sexandsubmission thetrainingofo \
-theupperfloor tspussyhunters tsseduction ultimatesurrender waterbondage whippedass wiredpussy"
+mappingscollection = db['mappings']
 
-mylfsources = "mylfofthemonth mylfwood shoplyftermylf sofiemariexxx gotmylf mylf mylfblows mylflabs mylfselects mylfxmandyflores mylfxmisslexa newmylfs"
+collections = [
+  "adulttime",
+  "bangbros",
+  "brazzers",
+  "brazzers_collections",
+  "genderx",
+  "genderx_collections",
+  "kink",
+  "mylf",
+  "vixen",
+  "wicked"
+]
 
-
-kinkarray = kinksources.split()
-for source in kinkarray:
-  try:
-    mappings.insert_one({"source": source, "target": "kink"})
-  except:
-    pass
-
-mylfarray = mylfsources.split()
-for source in mylfarray:
-  try:
-    mappings.insert_one({"source": source, "target": "mylf"})
-  except:
-    pass
-
-
-
-#mappings.insert_one({"source": "deeper", "target": "deeper"})
+for site in collections:
+  # print(site)
+  collection = db[site]
+  channels = collection.distinct("channel")
+  # print(channels)
+  for channel in channels:
+    channel = channel.replace(' ','').lower()
+    mappingscollection.update_one({"source": channel}, {"$set": {"target": site} }, upsert=True )
+    print("added mapping:", channel, site)
