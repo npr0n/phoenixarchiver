@@ -14,43 +14,43 @@ from datetime import datetime
 
 ### SITE CONFIG ###
 kinksites = [
-"kink"
+# "kink"
 ]
 
 vixensites = [
-"vixen"
+# "vixen"
 ]
 
 mylfsites = [
-"mylf"
+# "mylf"
 ]
 
 adulttimesites = [
-#  "adulttime"
+  "adulttime"
 ]
 
 genderxsites = [
-"genderx"
+# "genderx"
 ]
 
 genderxcollections = [
-"genderx_collections"
+# "genderx_collections"
 ]
 
 brazzerssites = [
- "brazzers"
+#  "brazzers"
 ]
 
 brazzerscollections = [
- "brazzers_collections"
+#  "brazzers_collections"
 ]
 
 wickedsites = [
- "wicked"
+#  "wicked"
 ]
 
 bangbrossites = [
- "bangbros"
+#  "bangbros"
 ]
 
 ### GLOBAL ###
