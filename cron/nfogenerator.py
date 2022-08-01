@@ -4,7 +4,6 @@ import os
 from lxml import etree as ET
 from lxml.etree import CDATA
 from datetime import datetime
-import json
 import glob
 import requests
 
