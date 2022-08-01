@@ -24,6 +24,7 @@ for site in collections:
   collection = db[site]
   channels = collection.distinct("channel")
   # print(channels)
+  mappingscollection.update_one({"source": site}, {"$set": {"target": site} }, upsert=True )
   for channel in channels:
     channel = channel.replace(' ','').lower()
     mappingscollection.update_one({"source": channel}, {"$set": {"target": site} }, upsert=True )
