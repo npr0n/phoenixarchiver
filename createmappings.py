@@ -1,9 +1,5 @@
-from time import sleep
-from urllib.parse import urlparse
-from urllib import request
-import os
+
 from pymongo import MongoClient
-import sys
 
 client = MongoClient("mongodb://phoenixinserter:phoenix@localhost:27017/phoenixarchive")
 db = client.phoenixarchive

@@ -1,7 +1,4 @@
-import json
 from pymongo import MongoClient
-from bson import ObjectId
-import time
 from datetime import datetime
 
 client = MongoClient("mongodb://phoenixinserter:phoenix@localhost:27017/phoenixarchive")
