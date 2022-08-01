@@ -6,7 +6,6 @@ from selenium.webdriver.common.by import By
 from selenium.common.exceptions import NoSuchElementException
 from selenium.common.exceptions import TimeoutException
 from urllib.parse import urlparse
-import json
 from pymongo import MongoClient
 from bson import ObjectId
 import time
