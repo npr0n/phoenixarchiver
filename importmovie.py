@@ -4,7 +4,6 @@ import os
 from lxml import etree as ET
 from lxml.etree import CDATA
 from datetime import datetime
-import json
 import glob
 import requests
 import shutil
@@ -16,7 +15,7 @@ mappings = db['mappings']
 
 # directory
 basedir = "/mnt/naspool/media/porn"
-importdir = basedir + "/manualimport"
+importdir = basedir + "/test-manualimport"
 targetdir = basedir + "/movies"
 dbimagestore = basedir + "/db-imagestore"
 
@@ -28,6 +27,12 @@ for rootdir, subdirs, files in os.walk(importdir):
   for moviefile in files:
     # file base name
     filename = os.path.basename(moviefile)
+    
+    # clear doc variable
+    try:
+      del doc
+    except:
+      pass
     
     if os.path.splitext(moviefile)[1] in [".mkv", ".mp4"]:
       #print("movie filename:", os.path.join(rootdir, moviefile))
@@ -55,7 +60,7 @@ for rootdir, subdirs, files in os.walk(importdir):
         nfotitle = os.path.splitext(moviefile)[0]
 
 
-#################################################
+      #################################################
       ### identify movie
 
       nfochannel = nfotitle.split('.')[0].lower()
@@ -226,7 +231,7 @@ for rootdir, subdirs, files in os.walk(importdir):
         #print(nfolocation)
         tree.write(nfolocation, pretty_print=True, xml_declaration=True, encoding='utf-8')
       except:
-        print("writing to file did not work")
+        print("writing nfo to file did not work")
         sys.exit(69)
 
 
@@ -234,14 +239,14 @@ for rootdir, subdirs, files in os.walk(importdir):
       ### if not exists try getting the poster
       try:
         #print(rootdir)
-        if not glob.glob(rootdir + "/poster.*"):
+        if not glob.glob(rootdir + "/" + os.path.splitext(nfofile)[0] + "-poster.*"):
           #print("no poster found in", rootdir)
 
           if doc['posterlocation']:
             sourcefile = dbimagestore + doc['posterlocation']
 
             if os.path.exists(sourcefile):
-              targetfile = rootdir + "/poster" + os.path.splitext(sourcefile)[1]
+              targetfile = rootdir + "/" + os.path.splitext(nfofile)[0] + "-poster" + os.path.splitext(sourcefile)[1]
               #print(targetfile)
               shutil.copyfile(sourcefile, targetfile)
             else:
@@ -249,7 +254,7 @@ for rootdir, subdirs, files in os.walk(importdir):
 
           elif doc['posterurl']:
             print("getting poster from", doc['posterurl'])
-            filelocation = rootdir + "/poster." + doc['posterurl'].split('?')[0].rsplit('.', 1)[1]
+            filelocation = rootdir + "/" + os.path.splitext(nfofile)[0] + "-poster." + doc['posterurl'].split('?')[0].rsplit('.', 1)[1]
             r = requests.get(doc['posterurl'])
             print("writing file")
             open(filelocation, 'wb').write(r.content)
@@ -265,20 +270,24 @@ for rootdir, subdirs, files in os.walk(importdir):
 #########################################################
       # create new folder name
       try:
-        removethese = [":",";","!","/","\\","'",'"']
-        underscorethese = [".", " "]
+        removethese = [":",";","/","\\","'",'"']
+        underscorethese = [".", " ", "!","?",'$']
         newfoldername = doc['title']
         for i in underscorethese:
           newfoldername = newfoldername.replace(i, '_')
         for i in removethese:
           newfoldername = newfoldername.replace(i, '')
         newfoldername = newfoldername + "_-_" + datetime.strptime(doc['dateymd'], '%y.%m.%d').strftime('%Y')
+        target = targetdir + "/" + newfoldername
         print("Old Folder :", rootdir)
-        print("New Folder :      ", targetdir + "/" + newfoldername)
-        shutil.move(rootdir, targetdir + "/" + newfoldername)
+        print("New Folder :           ", target)
+
+        # handle folder already exists; usually duplicate movie
+        if os.path.exists(target):
+          print("New Folder already exists. Probably a duplicate, moving anyway")
+        shutil.move(rootdir, target)
       except:
-        print("Couldn't build new folder name")
-        exit(69)
+        pass
 
 
       

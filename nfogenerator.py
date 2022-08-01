@@ -212,14 +212,14 @@ for nfofile in nfofiles:
 
       ### if not exists try getting the poster
       try:
-        dirname = os.path.dirname(nfofile)
-        if glob.glob(dirname + "/poster*"):
+        dirname = os.path.splitext(nfofile)[0]
+        if glob.glob(dirname + "-poster*"):
           print("poster already exists")
         else:
           #print("no poster found in", dirname)
           if doc['posterurl']:
             #print("getting poster from", doc['posterurl'])
-            filelocation = dirname + "/poster." + doc['posterurl'].split('?')[0].rsplit('.', 1)[1]
+            filelocation = dirname + "-poster." + doc['posterurl'].split('?')[0].rsplit('.', 1)[1]
             r = requests.get(doc['posterurl'])
             #print("writing file")
             open(filelocation, 'wb').write(r.content)
