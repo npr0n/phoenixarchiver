@@ -1,3 +1,5 @@
+#!/usr/bin/python3
+
 from pymongo import MongoClient
 import sys
 import os
@@ -15,7 +17,7 @@ mappings = db['mappings']
 
 # directory
 basedir = "/mnt/naspool/media/porn"
-importdir = basedir + "/test-manualimport"
+importdir = basedir + "/manualimport"
 targetdir = basedir + "/movies"
 dbimagestore = basedir + "/db-imagestore"
 
@@ -88,14 +90,14 @@ for rootdir, subdirs, files in os.walk(importdir):
         actor = nfotitle.split('.')[4]
         #print("actor:", actor)
       except:
-        print("no valid actor name found in filename:", nfotitle)
+        # print("no valid actor name found in filename:", nfotitle)
         continue
 
       # try matching via id
       if (date is None):
         try:
           movieid = nfotitle.split('.', 1)[1].rsplit('.', 1)[0].split('.xxx')[0].replace('.', ' ')
-          print("trying to match via id:", movieid, nfotitle)
+          # print("trying to match via id:", movieid, nfotitle)
 
           #moviename = nfotitle.split('.', 1)[1].rsplit('.', 1)[0].split('.xxx')[0].replace('.', ' ')
 
@@ -111,7 +113,7 @@ for rootdir, subdirs, files in os.walk(importdir):
         if (date is not None):
           doc = db[channel].find_one({"dateymd": date, "actors": {"$regex": actor, "$options": "i"}})
           if (doc is None):
-            print("got empty doc from database:", nfotitle)
+            # print("got empty doc from database:", nfotitle)
             try:
               doc = db[channel].find_one({"dateymd": date, "channel": {"$regex": nfochannel[:2]}})
               #print(doc, nfochannel)
@@ -280,7 +282,7 @@ for rootdir, subdirs, files in os.walk(importdir):
         newfoldername = newfoldername + "_-_" + datetime.strptime(doc['dateymd'], '%y.%m.%d').strftime('%Y')
         target = targetdir + "/" + newfoldername
         print("Old Folder :", rootdir)
-        print("New Folder :           ", target)
+        print("New Folder :      ", target)
 
         # handle folder already exists; usually duplicate movie
         if os.path.exists(target):

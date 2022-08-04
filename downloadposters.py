@@ -1,3 +1,5 @@
+#!/usr/bin/python3
+
 from time import sleep
 from urllib.parse import urlparse
 import urllib
@@ -19,7 +21,7 @@ sites = [
   "wicked"
 ]
 
-retry_errors = False
+retry_errors = True
 
 maxattempts = 5
 

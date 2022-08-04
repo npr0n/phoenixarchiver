@@ -1,3 +1,5 @@
+#!/usr/bin/python3
+
 from pymongo import MongoClient
 import sys
 import os
@@ -15,8 +17,6 @@ mappings = db['mappings']
 
 # directory
 basedir = "/mnt/naspool/media/porn/movies"
-
-nfotestfile = "/mnt/naspool/nas/scripts/phoenixarchiver/testfile.nfo"
 
 ### read from existing nfo file
 

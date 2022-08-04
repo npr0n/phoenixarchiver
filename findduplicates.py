@@ -1,3 +1,5 @@
+#!/usr/bin/python3
+
 import os
 
 searchdir = "/mnt/naspool/media/porn/movies"

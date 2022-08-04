@@ -1,10 +1,11 @@
+#!/usr/bin/python3
+
 from time import sleep
 from urllib.parse import urlparse
 import urllib
 import os
-import sys
 from pymongo import MongoClient
-import pycurl
+from PIL import Image
 
 
 sites = [
@@ -46,6 +47,9 @@ for site in sites:
     collection.update_many({"posterlocation": "404"}, {"$unset": {"posterlocation": " "}})
 
   while True:
+    
+    convert_to_jpg = False
+
     try:
       doc = collection.find_one({"posterlocation": {"$exists": False}, "posterurl": {"$exists": True} })
       print(doc['_id'])
@@ -57,6 +61,12 @@ for site in sites:
     try:
       # print(doc['posterurl'])
       posterfn = "/" + site + "/" + doc['id'] + os.path.splitext(urlparse(doc['posterurl']).path)[1]
+
+      # prepare conversion to jpg
+      if os.path.splitext(posterfn)[1] == ".webp":
+        posterfn = os.path.splitext(posterfn)[0] + ".jpg"
+        convert_to_jpg = True
+
       # print(posterfn)
       if doc['id'] is None:
         print("database entry does not contain movie id! :", doc['_id'])
@@ -70,8 +80,13 @@ for site in sites:
           try:
             response = urllib.request.urlopen(doc['posterurl'])
             content = response.read()
-            out_file = open(posterfile, "wb")
-            out_file.write(content)
+
+            if convert_to_jpg:
+              Image.open(content).convert("RGB").save(posterfile, "jpeg")
+            else:
+              out_file = open(posterfile, "wb")
+              out_file.write(content)
+            
             doc['posterlocation'] = posterfn
             break
           except:

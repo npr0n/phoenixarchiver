@@ -1,9 +1,12 @@
+#!/usr/bin/python3
+
 from pymongo import MongoClient
 import sys
 import os
 from lxml import etree as ET
 from lxml.etree import CDATA
 from datetime import datetime
+import json
 import glob
 import requests
 
@@ -14,8 +17,6 @@ mappings = db['mappings']
 
 # directory
 basedir = "/mnt/naspool/media/porn/movies"
-
-nfotestfile = "/mnt/naspool/nas/scripts/phoenixarchiver/testfile.nfo"
 
 ### read from existing nfo file
 
@@ -211,14 +212,14 @@ for nfofile in nfofiles:
 
       ### if not exists try getting the poster
       try:
-        dirname = os.path.dirname(nfofile)
-        if glob.glob(dirname + "/poster*"):
+        dirname = os.path.splitext(nfofile)[0]
+        if glob.glob(dirname + "-poster*"):
           print("poster already exists")
         else:
           #print("no poster found in", dirname)
           if doc['posterurl']:
             #print("getting poster from", doc['posterurl'])
-            filelocation = dirname + "/poster." + doc['posterurl'].split('?')[0].rsplit('.', 1)[1]
+            filelocation = dirname + "-poster." + doc['posterurl'].split('?')[0].rsplit('.', 1)[1]
             r = requests.get(doc['posterurl'])
             #print("writing file")
             open(filelocation, 'wb').write(r.content)
