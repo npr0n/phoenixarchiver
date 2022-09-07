@@ -5,6 +5,8 @@ from selenium.webdriver.common.by import By
 from selenium.common.exceptions import NoSuchElementException
 from urllib.parse import urlparse
 from pymongo import MongoClient
+import pymongo.errors
+import logging as log
 
 ### SITE CONFIG ###
 sites = [
@@ -199,12 +201,21 @@ sites = [
   "baseUrl": "https://www.evilangel.com/en/movies",
   "resultSearchPattern": "//div[contains(@class, 'ais-hits--item')]//h3/a",
   "nextPageSearchPattern": "//a[contains(@class, 'ais-pagination--link') and contains(@aria-label, 'Next')]",
+  "collection": "evilangel_collections"
+},
+{
+  "baseUrl": "https://www.evilangel.com/en/videos",
+  "resultSearchPattern": "//div[contains(@class, 'component-SceneThumb-SceneInfo-default')]//h3/a",
+  "nextPageSearchPattern": "//a[contains(@class, 'next-Link')]",
+  "dateSearchPattern": "../../..//span[contains(@class, 'SceneDetail-DatePublished-Text')]",
+  "ratingSearchPattern": "../../..//span[contains(@class, 'SceneDetail-RatingPercentage-Text')]",
   "collection": "evilangel"
 }
 ]
 
 
 ### GLOBAL ###
+
 # selenium chromium
 options = webdriver.ChromeOptions()
 options.headless = True
@@ -217,14 +228,15 @@ driver.implicitly_wait(3)
 client = MongoClient("mongodb://phoenixinserter:phoenix@localhost:27017/phoenixarchive")
 db = client.phoenixarchive
 
-maxPage = 1
+maxPage = 3
 
 # ids = [urlparse(link).path.rpartition('/')[-1] for link in links]
 
 for site in sites:
+  # print("working on site:", site['collection'])
   try:
     currentPage = int(site['baseUrl'].rsplit('/', 1)[1])
-    #print("current page from url")
+    # print("current page from url")
   except:
     currentPage = 1
   results = []
@@ -246,7 +258,7 @@ for site in sites:
     # print("Current page: ", url)
     try:
       elems = driver.find_elements(By.XPATH, site['resultSearchPattern'])
-      # print(driver.page_source)
+
       for elem in elems:
         result = {}
         result['url'] = elem.get_attribute('href')
@@ -266,9 +278,13 @@ for site in sites:
         except:
           pass
         
-        # update / insert into database
-        # print("upserting:", result['url'])
-        collection.update_one({"id": result['id']}, {"$set": result}, upsert=True)
+        try:
+          # update / insert into database
+          # print("upserting:", result['url'])
+          collection.update_one({"url": result['url']}, {"$set": result}, upsert=True)
+        except pymongo.errors.DuplicateKeyError:
+          # probably a race condition due to upsert and multiple unique keys
+          continue
         
 
       # print("Found elements on current page:", len(elems))
@@ -294,6 +310,6 @@ for site in sites:
           break
     except:
       break
-  #print("Searched:", site['collection'])
+  # print("Searched:", site['collection'])
 
 driver.quit()

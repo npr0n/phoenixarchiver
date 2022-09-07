@@ -1588,7 +1588,7 @@ for site in evilangelsites:
     # title
     for attempt in range(findmaxtries):
       try:
-        doc['title'] = driver.find_element(By.XPATH, "//h1[contains(@class, 'sceneTitle')]").get_attribute("innerText")
+        doc['title'] = driver.find_element(By.XPATH, "//h1[contains(@class, 'Title')]").get_attribute("textContent")
       except NoSuchElementException:
         continue
       else:
@@ -1597,7 +1597,7 @@ for site in evilangelsites:
     # description
     for attempt in range(findmaxtries):
       try:
-        doc['description'] = driver.find_element(By.XPATH, "//p[contains(@class, 'sceneDesc')]").get_attribute("innerText")
+        doc['description'] = driver.find_element(By.XPATH, "//div[contains(@class, 'DescriptionText')]").get_attribute("textContent")
       except NoSuchElementException:
         continue
       else:
@@ -1606,7 +1606,7 @@ for site in evilangelsites:
     # date (site format)
     for attempt in range(findmaxtries):
       try:
-        doc['datesite'] = driver.find_element(By.XPATH, "//li[contains(@class, 'updatedDate')]").get_attribute("innerText")
+        doc['datesite'] = driver.find_element(By.XPATH, "//span[contains(@class, 'Date')]").get_attribute("textContent")
       except NoSuchElementException:
         continue
       else:
@@ -1614,14 +1614,14 @@ for site in evilangelsites:
         
     # date (yy.mm.dd)
     try:
-      doc['dateymd'] = datetime.strptime(doc['datesite'], '%m-%d-%Y').strftime('%y.%m.%d')
+      doc['dateymd'] = doc['datesite']
     except:
       pass
         
     # poster url
     for attempt in range(findmaxtries):
       try:
-        doc['posterurl'] = driver.find_element(By.XPATH, "//div[@class= 'vjs-poster']").value_of_css_property('background-image').split('"')[1]
+        doc['posterurl'] = driver.find_element(By.XPATH, "//meta[@name= 'twitter:image']").get_attribute('content')
       except NoSuchElementException:
         continue
       else:
@@ -1639,7 +1639,7 @@ for site in evilangelsites:
     # director
     for attempt in range(findmaxtries):
       try:
-        doc['director'] = driver.find_element(By.XPATH, "//div[contains(@class, 'sceneColDirectors')]/a").get_attribute("innerText")
+        doc['director'] = driver.find_element(By.XPATH, "//span[contains(@class, 'Director')]").get_attribute("innerText")
       except NoSuchElementException:
         continue
       else:
@@ -1657,9 +1657,8 @@ for site in evilangelsites:
     # actors
     for attempt in range(findmaxtries):
       try:
-        for actor in (driver.find_elements(By.XPATH, "//div[contains(@class, 'sceneColActors')]/a")):
-          if not "websites" in actor.get_attribute("href"):
-            actors.append(actor.get_attribute("textContent"))
+        for actor in (driver.find_elements(By.XPATH, "//a[contains(@class, 'ActorThumb-Name-Link')]")):
+          actors.append(actor.get_attribute("textContent"))
         doc['actors'] = actors
       except NoSuchElementException:
         continue
@@ -1669,7 +1668,7 @@ for site in evilangelsites:
     # categories
     for attempt in range(findmaxtries):
       try:
-        for category in (driver.find_elements(By.XPATH, "//div[contains(@class, 'sceneColCategories')]/a")):
+        for category in (driver.find_elements(By.XPATH, "//a[contains(@class, 'ScenePlayerHeaderDesktop-Categories-Link')]")):
           categories.append(category.get_attribute("textContent"))
         doc['categories'] = categories
       except NoSuchElementException:
@@ -1677,25 +1676,25 @@ for site in evilangelsites:
       else:
         break
     
-    # collection title
-    for attempt in range(findmaxtries):
-      try:
-        doc['collectiontitle'] = driver.find_element(By.XPATH, "//a[contains(@class, 'dvdLink')]").get_attribute("title")
-        # if (h2text.split()[-1].lower() == "episodes" ):
-        #   doc['collectiontitle'] = h2text.rsplit(' ', 1)[0]
-      except NoSuchElementException:
-        continue
-      else:
-        break
+    # # collection title
+    # for attempt in range(findmaxtries):
+    #   try:
+    #     doc['collectiontitle'] = driver.find_element(By.XPATH, "//a[contains(@class, 'dvdLink')]").get_attribute("title")
+    #     # if (h2text.split()[-1].lower() == "episodes" ):
+    #     #   doc['collectiontitle'] = h2text.rsplit(' ', 1)[0]
+    #   except NoSuchElementException:
+    #     continue
+    #   else:
+    #     break
 
 
     #print(json.dumps(doc, sort_keys=True, ensure_ascii=False, indent=2))
     filter = { '_id': doc['_id']}
 
     collection.update_one(filter, { '$set': doc })
-    print("Updated", doc['_id'])
-    break
-    time.sleep(3)
+    # print("Updated", doc['_id'])
+    # break
+    # time.sleep(3)
 
 driver.quit()
 #print (results)

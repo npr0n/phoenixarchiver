@@ -8,7 +8,6 @@ from selenium.webdriver.common.by import By
 from selenium.common.exceptions import NoSuchElementException
 from selenium.common.exceptions import TimeoutException
 from urllib.parse import urlparse
-import json
 from pymongo import MongoClient
 from bson import ObjectId
 import time
@@ -55,6 +54,10 @@ bangbrossites = [
   "bangbros"
 ]
 
+evilangelsites = [
+  "evilangel"
+]
+
 ### GLOBAL ###
 # selenium chromium
 options = webdriver.ChromeOptions()
@@ -65,7 +68,7 @@ driver = webdriver.Chrome(options=options)
 driver.implicitly_wait(10)
 
 getmaxtries = 3
-findmaxtries = 3
+findmaxtries = 1
 updatemaxnumber = 100
 
 # mongodb connection
@@ -1526,6 +1529,159 @@ for site in bangbrossites:
     #     h2text = driver.find_element(By.XPATH, "//div[@aria-atomic= 'true']/preceding-sibling::div/div/h2").get_attribute("textContent")
     #     if (h2text.split()[-1].lower() == "episodes" ):
     #       doc['collectiontitle'] = h2text.rsplit(' ', 1)[0]
+    #   except NoSuchElementException:
+    #     continue
+    #   else:
+    #     break
+
+
+    #print(json.dumps(doc, sort_keys=True, ensure_ascii=False, indent=2))
+    filter = { '_id': doc['_id']}
+
+    collection.update_one(filter, { '$set': doc })
+    # print("Updated", doc['_id'])
+    # break
+    # time.sleep(3)
+
+### EVILANGEL ###########################################################
+for site in evilangelsites:
+  collection = db[site]
+  print("Working on", site)
+  # use maximum or while True
+  # for number in range(updatemaxnumber):
+  while True:
+    try:
+      doc = collection.find_one({"title": {"$exists": False}})
+      print(doc['_id'])
+    except:
+      print("Did not find dataset without title.")
+      break
+    
+
+    # get page
+    for attempt in range(getmaxtries):
+      try:
+        actors = []
+        categories = []
+        driver.get(doc['url'])
+      except:
+        time.sleep(3)
+        continue
+      else:
+        break
+    else:
+      print("Website timed out several times. Skipping.")
+    
+    # id
+    try:
+      doc['id'] = urlparse(doc['url']).path.rpartition('/')[-1]
+    except:
+      continue
+
+
+    # id_2
+    try:
+      doc['id_2'] = urlparse(doc['url']).path.rsplit('/', 2)[-2]
+    except:
+      continue
+
+    # title
+    for attempt in range(findmaxtries):
+      try:
+        doc['title'] = driver.find_element(By.XPATH, "//h1[contains(@class, 'Title')]").get_attribute("textContent")
+      except NoSuchElementException:
+        continue
+      else:
+        break
+
+    # description
+    for attempt in range(findmaxtries):
+      try:
+        doc['description'] = driver.find_element(By.XPATH, "//div[contains(@class, 'DescriptionText')]").get_attribute("textContent")
+      except NoSuchElementException:
+        continue
+      else:
+        break
+
+    # date (site format)
+    for attempt in range(findmaxtries):
+      try:
+        doc['datesite'] = driver.find_element(By.XPATH, "//span[contains(@class, 'Date')]").get_attribute("textContent")
+      except NoSuchElementException:
+        continue
+      else:
+        break
+        
+    # date (yy.mm.dd)
+    try:
+      doc['dateymd'] = doc['datesite']
+    except:
+      pass
+        
+    # poster url
+    for attempt in range(findmaxtries):
+      try:
+        doc['posterurl'] = driver.find_element(By.XPATH, "//meta[@name= 'twitter:image']").get_attribute('content')
+      except NoSuchElementException:
+        continue
+      else:
+        break
+        
+    # # channel
+    # for attempt in range(findmaxtries):
+    #   try:
+    #     doc['channel'] = driver.find_element(By.XPATH, "//div[contains(@class, 'shoot-logo')]/a").get_attribute("href").rsplit('/', 1)[-1]
+    #   except NoSuchElementException:
+    #     continue
+    #   else:
+    #     break
+    
+    # director
+    for attempt in range(findmaxtries):
+      try:
+        doc['director'] = driver.find_element(By.XPATH, "//span[contains(@class, 'Director')]").get_attribute("innerText")
+      except NoSuchElementException:
+        continue
+      else:
+        break
+    
+    # rating
+    # for attempt in range(findmaxtries):
+    #   try:
+    #     doc['rating'] = driver.find_element(By.XPATH, "//div[@class= 'bVdPl_it_like']/div[@class= 'bVdPl_txt']").get_attribute("innerText")
+    #   except NoSuchElementException:
+    #     continue
+    #   else:
+    #     break
+    
+    # actors
+    for attempt in range(findmaxtries):
+      try:
+        for actor in (driver.find_elements(By.XPATH, "//a[contains(@class, 'ActorThumb-Name-Link')]")):
+          actors.append(actor.get_attribute("textContent"))
+        doc['actors'] = actors
+      except NoSuchElementException:
+        continue
+      else:
+        break
+    
+    # categories
+    for attempt in range(findmaxtries):
+      try:
+        for category in (driver.find_elements(By.XPATH, "//a[contains(@class, 'ScenePlayerHeaderDesktop-Categories-Link')]")):
+          categories.append(category.get_attribute("textContent"))
+        doc['categories'] = categories
+      except NoSuchElementException:
+        continue
+      else:
+        break
+    
+    # # collection title
+    # for attempt in range(findmaxtries):
+    #   try:
+    #     doc['collectiontitle'] = driver.find_element(By.XPATH, "//a[contains(@class, 'dvdLink')]").get_attribute("title")
+    #     # if (h2text.split()[-1].lower() == "episodes" ):
+    #     #   doc['collectiontitle'] = h2text.rsplit(' ', 1)[0]
     #   except NoSuchElementException:
     #     continue
     #   else:
