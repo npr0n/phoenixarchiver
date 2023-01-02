@@ -16,7 +16,7 @@ db = client.phoenixarchive
 mappings = db['mappings']
 
 # directory
-basedir = "/mnt/naspool/media/porn"
+basedir = "/naspool/encrypted/media/porn"
 importdir = basedir + "/manualimport"
 targetdir = basedir + "/movies"
 dbimagestore = basedir + "/db-imagestore"

@@ -2,7 +2,7 @@
 
 import os
 
-searchdir = "/mnt/naspool/media/porn/movies"
+searchdir = "/naspool/encrypted/media/porn/movies"
 
 for dir in os.walk(searchdir):
   count = 0

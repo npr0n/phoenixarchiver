@@ -26,7 +26,7 @@ retry_errors = False
 maxattempts = 5
 
 # directory for saved images
-imagestore = "/mnt/naspool/media/porn/db-imagestore"
+imagestore = "/naspool/encrypted/media/porn/db-imagestore"
 
 # db connection
 client = MongoClient("mongodb://phoenixinserter:phoenix@localhost:27017/phoenixarchive")

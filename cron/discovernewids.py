@@ -4,7 +4,7 @@ from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.common.exceptions import NoSuchElementException
 from urllib.parse import urlparse
-from pymongo import MongoClient
+from pymongo.mongo_client import MongoClient
 import pymongo.errors
 import logging as log
 

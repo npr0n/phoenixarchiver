@@ -76,7 +76,7 @@ client = MongoClient("mongodb://phoenixinserter:phoenix@localhost:27017/phoenixa
 db = client.phoenixarchive
 
 # directory for saved images
-imagestore = "/mnt/naspool/media/porn/db-imagestore"
+imagestore = "/naspool/encrypted/media/porn/db-imagestore"
 
 ### KINK ################################################################
 for site in kinksites:

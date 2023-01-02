@@ -16,7 +16,7 @@ db = client.phoenixarchive
 mappings = db['mappings']
 
 # directory
-basedir = "/mnt/naspool/media/porn/movies"
+basedir = "/naspool/encrypted/media/porn/movies"
 
 ### read from existing nfo file
 

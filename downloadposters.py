@@ -4,7 +4,7 @@ from time import sleep
 from urllib.parse import urlparse
 import urllib
 import os
-from pymongo import MongoClient
+from pymongo.mongo_client import MongoClient
 from PIL import Image
 
 
@@ -26,7 +26,7 @@ retry_errors = True
 maxattempts = 5
 
 # directory for saved images
-imagestore = "/mnt/naspool/media/porn/db-imagestore"
+imagestore = "/naspool/encrypted/media/porn/db-imagestore"
 
 # db connection
 client = MongoClient("mongodb://phoenixinserter:phoenix@localhost:27017/phoenixarchive")

@@ -2,148 +2,33 @@
 
 from selenium import webdriver
 from selenium.webdriver.common.by import By
+from selenium.webdriver.common.action_chains import ActionChains
 from selenium.common.exceptions import NoSuchElementException
+from selenium.common.exceptions import ElementClickInterceptedException
 from urllib.parse import urlparse
 from pymongo.mongo_client import MongoClient
 import pymongo.errors
+from time import sleep
 import logging as log
 
 ### SITE CONFIG ###
 sites = [
 {
-  "baseUrl": "https://www.kink.com/shoots/latest",
-  "resultSearchPattern": "//a[@class= 'shoot-link']",
-  "nextPageSearchPattern": "//nav[@class= 'paginated-nav']/ul/li/a/span[text() = 'Next']/parent::a[1]",
-  "collection": "kink"
-},
-{
-  "baseUrl": "https://www.kink.com/shoots/featured",
-  "resultSearchPattern": "//a[@class= 'shoot-link']",
-  "nextPageSearchPattern": "//nav[@class= 'paginated-nav']/ul/li/a/span[text() = 'Next']/parent::a[1]",
-  "collection": "kink"
-},
-{
-  "baseUrl": "https://www.kink.com/shoots/partner",
-  "resultSearchPattern": "//a[@class= 'shoot-link']",
-  "nextPageSearchPattern": "//nav[@class= 'paginated-nav']/ul/li/a/span[text() = 'Next']/parent::a[1]",
-  "collection": "kink"
-},
-{
-  "baseUrl": "https://www.blacked.com/videos",
-  "resultSearchPattern": "//a[@data-test-component= 'TitleLink']",
-  "nextPageSearchPattern": "//a[@data-test-component= 'PaginationNext']",
-  "collection": "vixen"
-},
-{
-  "baseUrl": "https://www.blackedraw.com/videos",
-  "resultSearchPattern": "//a[@data-test-component= 'TitleLink']",
-  "nextPageSearchPattern": "//a[@data-test-component= 'PaginationNext']",
-  "collection": "vixen"
-},
-{
-  "baseUrl": "https://www.deeper.com/videos",
-  "resultSearchPattern": "//a[@data-test-component= 'TitleLink']",
-  "nextPageSearchPattern": "//a[@data-test-component= 'PaginationNext']",
-  "collection": "vixen"
-},
-{
-  "baseUrl": "https://www.slayed.com/videos",
-  "resultSearchPattern": "//a[@data-test-component= 'TitleLink']",
-  "nextPageSearchPattern": "//a[@data-test-component= 'PaginationNext']",
-  "collection": "vixen"
-},
-{
-  "baseUrl": "https://www.tushy.com/videos",
-  "resultSearchPattern": "//a[@data-test-component= 'TitleLink']",
-  "nextPageSearchPattern": "//a[@data-test-component= 'PaginationNext']",
-  "collection": "vixen"
-},
-{
-  "baseUrl": "https://www.tushyraw.com/videos",
-  "resultSearchPattern": "//a[@data-test-component= 'TitleLink']",
-  "nextPageSearchPattern": "//a[@data-test-component= 'PaginationNext']",
-  "collection": "vixen"
-},
-{
-  "baseUrl": "https://www.vixen.com/videos",
-  "resultSearchPattern": "//a[@data-test-component= 'TitleLink']",
-  "nextPageSearchPattern": "//a[@data-test-component= 'PaginationNext']",
-  "collection": "vixen"
-},
-{
   "baseUrl": "https://www.genderxfilms.com/en/videos",
-  "resultSearchPattern": "//a[contains(@class, 'imgLink')]",
-  "nextPageSearchPattern": "//a[@aria-label= 'Next']",
-  "collection": "genderx"
+  "resultSearchPattern": "//a[contains(@class, 'SceneThumb-SceneInfo-SceneTitle-Link')]",
+  "nextPageSearchPattern": "//a[contains(@class, 'next-Link')]",
+  "collection": "genderx",
+  "dateSearchPattern": "../../..//span[contains(@class, 'SceneDetail-DatePublished-Text')]",
+  "ratingSearchPattern": "../../..//span[contains(@class, 'SceneDetail-RatingPercentage-Text')]"
 },
 {
   "baseUrl": "https://www.genderxfilms.com/en/dvds",
-  "resultSearchPattern": "//a[contains(@class, 'imgLink')]",
-  "nextPageSearchPattern": "//a[@aria-label= 'Next']",
-  "collection": "genderx_collections"
-},
-{
-  "baseUrl": "https://www.brazzers.com/site/96/brazzers-exxtra",
-  "resultSearchPattern": "//div[@aria-atomic = 'true']//span/a",
-  "countNextPage": True,
-  "collection": "brazzers",
-  "channel": "brazzersexxtra"
-},
-{
-  "baseUrl": "https://www.brazzers.com/site/90/hot-and-mean",
-  "resultSearchPattern": "//div[@aria-atomic = 'true']//span/a",
-  "countNextPage": False,
-  "collection": "brazzers",
-  "channel": "hotandmean"
-},
-{
-  "baseUrl": "https://www.brazzers.com/site/81/real-wife-stories",
-  "resultSearchPattern": "//div[@aria-atomic = 'true']//span/a",
-  "countNextPage": False,
-  "collection": "brazzers",
-  "channel": "realwifestories"
-},
-{
-  "baseUrl": "https://www.brazzers.com/site/78/milfs-like-it-big",
-  "resultSearchPattern": "//div[@aria-atomic = 'true']//span/a",
-  "countNextPage": False,
-  "collection": "brazzers",
-  "channel": "milfslikeitbig"
-},
-{
-  "baseUrl": "https://www.brazzers.com/site/67/mommy-got-boobs",
-  "resultSearchPattern": "//div[@aria-atomic = 'true']//span/a",
-  "countNextPage": False,
-  "collection": "brazzers",
-  "channel": "mommygotboobs"
-},
-{
-  "baseUrl": "https://www.brazzers.com/videos/page/1",
-  "resultSearchPattern": "//div[@aria-atomic = 'true']//span/a",
-  "countNextPage": True,
-  "collection": "brazzers"
-},
-{
-  "baseUrl": "https://www.brazzers.com/series",
-  "resultSearchPattern": "//div[@aria-atomic = 'true']//span/a",
-  "countNextPage": False,
-  "collection": "brazzers_collections"
-},
-{
-  "baseUrl": "https://www.wicked.com/en/videos/page/1",
   "resultSearchPattern": "//a[contains(@class, 'SceneThumb-SceneInfo-SceneTitle-Link')]",
-  "countNextPage": True,
-  "collection": "wicked"
+  "nextPageSearchPattern": "//a[contains(@class, 'next-Link')]",
+  "collection": "genderx_collections",
+  "dateSearchPattern": "../../..//span[contains(@class, 'SceneDetail-DatePublished-Text')]",
+  "ratingSearchPattern": "../../..//span[contains(@class, 'SceneDetail-RatingPercentage-Text')]"
 },
-{
-  "baseUrl": "https://bangbros.com/videos/1",
-  "resultSearchPattern": "//a[contains(@class, 'thmb_lnk')]",
-  "nextPageSearchPattern": "//a[@id= 'pagination_btn_next']",
-  "collection": "bangbros",
-  "channelSearchPattern": "..//a[contains(@class, 'thmb_mr_lnk')]",
-  "dateSearchPattern": "..//span[contains(@class, 'thmb_mr_2')]/span[contains(@class, 'faTxt')]"
-},
-#### ADULTTIME #######################################
 {
   "baseUrl": "https://www.devilsfilm.com/en/videos/sort/latest/page/1",
   "resultSearchPattern": "//a[contains(@class, 'SceneThumb-SceneInfo-SceneTitle-Link')]",
@@ -278,20 +163,6 @@ sites = [
   "channelSearchPattern": "../../..//a[contains(@class, 'SceneDetail-ChannelName-Link')]",
   "dateSearchPattern": "../../..//span[contains(@class, 'SceneDetail-DatePublished-Text')]",
   "ratingSearchPattern": "../../..//span[contains(@class, 'SceneDetail-RatingPercentage-Text')]"
-},
-{
-  "baseUrl": "https://www.evilangel.com/en/movies",
-  "resultSearchPattern": "//div[contains(@class, 'ais-hits--item')]//h3/a",
-  "nextPageSearchPattern": "//a[contains(@class, 'ais-pagination--link') and contains(@aria-label, 'Next')]",
-  "collection": "evilangel_collections"
-},
-{
-  "baseUrl": "https://www.evilangel.com/en/videos",
-  "resultSearchPattern": "//div[contains(@class, 'component-SceneThumb-SceneInfo-default')]//h3/a",
-  "nextPageSearchPattern": "//a[contains(@class, 'next-Link')]",
-  "dateSearchPattern": "../../..//span[contains(@class, 'SceneDetail-DatePublished-Text')]",
-  "ratingSearchPattern": "../../..//span[contains(@class, 'SceneDetail-RatingPercentage-Text')]",
-  "collection": "evilangel"
 }
 ]
 
@@ -300,8 +171,8 @@ sites = [
 
 # selenium chromium
 options = webdriver.ChromeOptions()
-options.headless = True
-options.add_argument('disable-gpu')
+# options.headless = True
+# options.add_argument('disable-gpu')
 options.add_argument('user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/107.0.0.0 Safari/537.36')
 driver = webdriver.Remote(command_executor = 'http://127.0.0.1:4444/wd/hub', options=options)
 driver.implicitly_wait(3)
@@ -315,10 +186,10 @@ maxPage = 10
 # ids = [urlparse(link).path.rpartition('/')[-1] for link in links]
 
 for site in sites:
-  # print("working on site:", site['collection'])
+  print("working on site:", site['collection'])
   try:
     currentPage = int(site['baseUrl'].rsplit('/', 1)[1])
-    # print("current page from url")
+    print("current page from url")
   except:
     currentPage = 1
   results = []
@@ -326,18 +197,15 @@ for site in sites:
   url = site['baseUrl']
   collection = db[site['collection']]
   pageCounter = 1
-    
+  
+  try:
+    driver.get(url)
+  except:
+    print("could not get page", url)
+    break
+
   while pageCounter <= maxPage:
-
-    pageCounter += 1
-    try:
-      driver.get(url)
-    except:
-      print("could not get page", url)
-      break
     
-
-    # print("Current page: ", url)
     try:
       elems = driver.find_elements(By.XPATH, site['resultSearchPattern'])
 
@@ -377,24 +245,33 @@ for site in sites:
       print("no such element exception")
       break
 
-    try:
-      try:
-        nextPageLink = driver.find_element(By.XPATH, site['nextPageSearchPattern']).get_attribute('href')
-        # print("Next page link was found:", nextPageLink)
-        url = nextPageLink
-      except:
-        if (site['countNextPage'] is True):
-          currentPage += 1
-          url = site['baseUrl'].rsplit('/', 1)[0] + "/" + str(currentPage)
-          # print("Next page link was built:", url)
-        elif (site['countNextPage'] is False):
-          # print("Page counter explicitly disabled")
-          break
-        else:
-          print("No next page found")
-          break
     except:
+      print("something went wrong with the scene detection")
       break
-  # print("Searched:", site['collection'])
+
+    try:
+      # we need to scroll down since the element cannot be selected otherwise
+      
+      nextPageElement = driver.find_element(By.XPATH, site['nextPageSearchPattern'])
+      # print("found element")
+      actions = ActionChains(driver)
+      actions.scroll_to_element(nextPageElement)
+      actions.perform()
+      # print("scrolled down")
+    except:
+      print("Something went wrong or we've reached the end.")
+      break
+    
+    try:
+      nextPageElement.click()
+      # print("clicked button")
+      pageCounter += 1
+    except ElementClickInterceptedException:
+      actions = ActionChains(driver)
+      actions.scroll_by_amount(0, 150)
+      actions.perform()
+      sleep(1)
+      nextPageElement.click()
+      pageCounter += 1
 
 driver.quit()

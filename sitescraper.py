@@ -8,7 +8,7 @@ from selenium.webdriver.common.by import By
 from selenium.common.exceptions import NoSuchElementException
 from selenium.common.exceptions import TimeoutException
 from urllib.parse import urlparse
-from pymongo import MongoClient
+from pymongo.mongo_client import MongoClient
 from bson import ObjectId
 import time
 from datetime import datetime
@@ -60,11 +60,18 @@ evilangelsites = [
 
 ### GLOBAL ###
 # selenium chromium
+remote = True
+headless = False
+
 options = webdriver.ChromeOptions()
-options.headless = True
-options.add_argument('disable-gpu')
+if headless:
+  options.headless = True
+  options.add_argument('disable-gpu')
 options.add_argument('user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/102.0.0.0 Safari/537.36')
-driver = webdriver.Chrome(options=options)
+if remote:
+  driver = webdriver.Remote(command_executor = 'http://127.0.0.1:4444/wd/hub', options=options)
+else:
+  driver = webdriver.Chrome(options=options)
 driver.implicitly_wait(10)
 
 getmaxtries = 3
