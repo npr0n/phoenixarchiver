@@ -12,4 +12,3 @@ def upsert(collection, object, key: str):
   except pymongo.errors.DuplicateKeyError:
     # this is most likely due to a race condition because of upsert and multiple keys
     return 0
-
