@@ -1,6 +1,6 @@
-from ._00_10_common import *
-from ._00_20_driver import *
-from ._00_30_db import *
+from variables import *
+from webdriver import *
+from database import *
 
 def loop_through_sites(db, driver, sites: list, maxPage: int = 1, initPage: int = 1):
   for site in sites:
