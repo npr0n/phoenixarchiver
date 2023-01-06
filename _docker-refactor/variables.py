@@ -1,11 +1,15 @@
-from time import sleep
-import multiprocessing
-from typing import NamedTuple
+#!/usr/bin/python3
 
+from webdriver import *
+from database import *
+import os
 
-# GLOBAL VARS
-useragent = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/107.0.0.0 Safari/537.36'
-seleniumhub = 'http://127.0.0.1:4444/wd/hub'
-mongoUri = "mongodb://phoenixinserter:phoenix@localhost:27017/phoenixarchive"
-mongoDB = "phoenixarchive"
-headless = False
+# GET ENVIRONMENT VARIABLES
+SELENIUM_USERAGENT = os.getenv('SELENIUM_USERAGENT', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/107.0.0.0 Safari/537.36')
+SELENIUM_HEADLESS = os.getenv('SELENIUM_HEADLESS', 'False').lower() in ('true', 't', '1')
+SELENIUM_URI = os.getenv('SELENIUM_URI', 'http://127.0.0.1:4444/wd/hub')
+
+MONGODB_URI = os.getenv('MONGODB_URI', "mongodb://phoenixinserter:phoenix@localhost:27107/phoenixarchive")
+MONGODB_DATABASE = os.getenv('MONGODB_DATABASE', "phoenixarchive")
+
+DISCOVERY_MAXPAGES = int(os.getenv('DISCOVERY_MAXPAGES', "10"))

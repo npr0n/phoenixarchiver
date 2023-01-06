@@ -1,11 +1,9 @@
 #!/usr/bin/python3
 
-import sys
-sys.path.append("..")
-from _00_common._00_10_common import *
-from _00_common._00_20_driver import *
-from _00_common._00_30_db import *
-from _00_common._00_40_logic import *
+from variables import *
+from webdriver import *
+from database import *
+from time import sleep
 
 ### SITE CONFIG ###
 sites = [
@@ -33,15 +31,11 @@ sites = [
 ]
 
 
-maxPage = 10
+
 
 def cookie_warn_close(driver):
-  ### COOKIE WARNING CLOSE ###
-  # try:
-    driver.get("https://www.kink.com")
-    driver.find_element(By.ID, "ccc-close").click()
-  # except:
-    # print("could not close cookie warning banner")
+  driver.get("https://www.kink.com")
+  driver.find_element(By.ID, "ccc-close").click()
 
 def kink_main(mongoUri: str, mongoDB: str, site: dict, useragent: str, command_executor: str, driver_iwait: int = 10, headless: bool = True, maxPage: int = 10, initPage: int = 1):
   # mongodb connection
@@ -53,13 +47,6 @@ def kink_main(mongoUri: str, mongoDB: str, site: dict, useragent: str, command_e
   discover_site(db, driver, site, maxPage)
   driver.quit()
 
-def add_numbers(number1, site:dict):
-  return number1
 
-# for site in sites:
-#   kink_main(db, site, useragent, seleniumhub, headless = headless, maxPage = maxPage)
-
-with multiprocessing.Pool() as pool:
-  taskitems = [(mongoUri, mongoDB, site, useragent, seleniumhub) for site in sites]
-  # print(taskitems)
-  pool.starmap(kink_main, taskitems)
+for site in sites:
+  kink_main(MONGODB_URI, MONGODB_DATABASE, site, SELENIUM_USERAGENT, SELENIUM_URI, headless = SELENIUM_HEADLESS, maxPage = DISCOVERY_MAXPAGES)
