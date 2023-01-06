@@ -1,22 +1,28 @@
-from selenium import webdriver
+#!/usr/bin/python3
+
+from variables import *
+from database import *
+from selenium import webdriver as wd
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.action_chains import ActionChains
 from selenium.common.exceptions import NoSuchElementException
 from selenium.common.exceptions import ElementClickInterceptedException
 from urllib.parse import urlparse
-from ._00_30_db import upsert
 from time import sleep
 
-def init_driver(useragent: str, command_executor: str, driver_iwait: int = 10, headless: bool = True):
+def init_driver(command_executor: str, useragent: str = "", driver_iwait: int = 10, headless: bool = True):
   
-  options = webdriver.ChromeOptions()
+  options = wd.ChromeOptions()
   if headless:
     options.headless = True
     options.add_argument('disable-gpu')
     options.add_argument("window-size=1024,768")
-  options.add_argument(f'useragent={useragent}')
+  if useragent != "":
+    options.add_argument(f'useragent={useragent}')
+  else:
+    options.add_argument('useragent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/108.0.0.0 Safari/537.36"')
 
-  driver = webdriver.Remote(command_executor = command_executor, options = options)
+  driver = wd.Remote(command_executor = command_executor, options = options)
   driver.implicitly_wait(driver_iwait)
 
   return(driver)
@@ -87,3 +93,19 @@ def parse_search_pages(driver, site: dict, collection, maxPage: int = 1, pageCou
       print("could not navigate further")
       return 0
   
+def loop_through_sites(db, driver, sites: list, maxPage: int = 1, initPage: int = 1):
+  for site in sites:
+    discover_site(db, driver, site, maxPage, initPage)
+
+def discover_site(db, driver, site: dict, maxPage: int = 1, initPage: int = 1):
+  
+  print("working on site:", site['baseUrl'])
+  try:
+    driver.get(site['baseUrl'])
+  except:
+    print("could not get page", site['baseUrl'])
+  
+  try:
+    parse_search_pages(driver, site, db[site['collection']], maxPage, initPage)
+  except:
+    print("something went wrong in parse_search_pages")
