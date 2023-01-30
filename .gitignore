@@ -1,3 +1,4 @@
 mongo.sh
 testfile.*
 __pycache__
+*.env

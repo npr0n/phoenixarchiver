@@ -21,10 +21,10 @@ def init_driver(command_executor: str, useragent: str = "", driver_iwait: int = 
     options.add_argument(f'useragent={useragent}')
   else:
     options.add_argument('useragent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/108.0.0.0 Safari/537.36"')
-
+  
   driver = wd.Remote(command_executor = command_executor, options = options)
   driver.implicitly_wait(driver_iwait)
-
+  
   return(driver)
 
 def parse_element(driver, elem, collection, channel = None, channelSearchPattern = None, ratingSearchPattern = None, dateSearchPattern = None):

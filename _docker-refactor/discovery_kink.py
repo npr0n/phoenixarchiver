@@ -40,7 +40,7 @@ def cookie_warn_close(driver):
 def kink_main(mongoUri: str, mongoDB: str, site: dict, useragent: str, command_executor: str, driver_iwait: int = 10, headless: bool = True, maxPage: int = 10, initPage: int = 1):
   # mongodb connection
   db = init_db(mongoUri, mongoDB)
-  driver = init_driver(useragent, command_executor, driver_iwait, headless = True)
+  driver = init_driver(useragent, command_executor, driver_iwait, headless = False)
   sleep(10)
   cookie_warn_close(driver)
   sleep(10)
@@ -49,4 +49,4 @@ def kink_main(mongoUri: str, mongoDB: str, site: dict, useragent: str, command_e
 
 
 for site in sites:
-  kink_main(MONGODB_URI, MONGODB_DATABASE, site, SELENIUM_USERAGENT, SELENIUM_URI, headless = SELENIUM_HEADLESS, maxPage = DISCOVERY_MAXPAGES)
+  kink_main(mongoUri = "MONGODB_URI", mongoDB = "MONGODB_DATABASE", site = site, useragent = "SELENIUM_USERAGENT", command_executor = "SELENIUM_URI", headless = SELENIUM_HEADLESS, maxPage = DISCOVERY_MAXPAGES)
