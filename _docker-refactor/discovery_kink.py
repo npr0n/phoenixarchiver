@@ -72,3 +72,5 @@ def kink_main(mongoUri = MONGODB_URI, mongoDB = MONGODB_DATABASE, sites = sites,
       kink_loop(db = db, driver = driver, site = site, maxPage = maxPage)
     except:
       continue
+  
+  driver.quit()
