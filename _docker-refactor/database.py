@@ -1,9 +1,16 @@
+#!/usr/bin/python3
+
+from variables import *
 from pymongo.mongo_client import MongoClient
 import pymongo.errors
 
 def init_db(uri: str, database: str):
   client = MongoClient(uri)
   db = client.get_database(database)
+  return db
+
+def init_default_db(uri = MONGODB_URI, database = MONGODB_DATABASE):
+  db = init_db(uri = uri, database = database)
   return db
 
 def upsert(collection, object, key: str):
