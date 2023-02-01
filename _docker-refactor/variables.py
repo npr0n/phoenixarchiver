@@ -1,7 +1,5 @@
 #!/usr/bin/python3
 
-from webdriver import *
-from database import *
 import os
 
 # GET ENVIRONMENT VARIABLES

@@ -12,3 +12,11 @@ def upsert(collection, object, key: str):
   except pymongo.errors.DuplicateKeyError:
     # this is most likely due to a race condition because of upsert and multiple keys
     return 0
+
+def find_one_no_title(collection):
+  try:
+    doc = collection.find_one({"title": {"$exists": False}})
+    return doc
+  except:
+    print("Did not find dataset without title")
+    return 1

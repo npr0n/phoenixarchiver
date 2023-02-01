@@ -27,6 +27,10 @@ def init_driver(command_executor: str, useragent: str = "", driver_iwait: int = 
   
   return(driver)
 
+def init_default_driver(command_executor = SELENIUM_URI, useragent = SELENIUM_USERAGENT, driver_iwait = 30, headless = SELENIUM_HEADLESS):
+  driver = init_driver(command_executor = command_executor, useragent = useragent, driver_iwait = driver_iwait, headless = headless)
+  return driver
+
 def parse_element(driver, elem, collection, channel = None, channelSearchPattern = None, ratingSearchPattern = None, dateSearchPattern = None):
   result = {}
   result['url'] = elem.get_attribute('href')
