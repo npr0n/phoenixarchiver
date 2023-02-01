@@ -10,7 +10,11 @@ from selenium.common.exceptions import ElementClickInterceptedException
 from urllib.parse import urlparse
 from time import sleep
 
-def init_driver(command_executor: str, useragent: str = "", driver_iwait: int = 10, headless: bool = True):
+def get_useragent(driver):
+  useragent = driver.execute_script("return navigator.userAgent")
+  return useragent
+
+def init_driver(command_executor: str, useragent: str = "", driver_iwait: int = 10, headless: bool = True, printoptions: bool = False):
   
   options = wd.ChromeOptions()
   if headless:
@@ -18,17 +22,18 @@ def init_driver(command_executor: str, useragent: str = "", driver_iwait: int = 
     options.add_argument('disable-gpu')
     options.add_argument("window-size=1024,768")
   if useragent != "":
-    options.add_argument(f'useragent={useragent}')
-  else:
-    options.add_argument('useragent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/108.0.0.0 Safari/537.36"')
+    options.add_argument(f'user-agent={useragent}')
+  
+  if printoptions:
+    print(options.arguments)
   
   driver = wd.Remote(command_executor = command_executor, options = options)
   driver.implicitly_wait(driver_iwait)
   
   return(driver)
 
-def init_default_driver(command_executor = SELENIUM_URI, useragent = SELENIUM_USERAGENT, driver_iwait = 30, headless = SELENIUM_HEADLESS):
-  driver = init_driver(command_executor = command_executor, useragent = useragent, driver_iwait = driver_iwait, headless = headless)
+def init_default_driver(command_executor = SELENIUM_URI, useragent = SELENIUM_USERAGENT, driver_iwait = 30, headless = SELENIUM_HEADLESS, printoptions: bool = False):
+  driver = init_driver(command_executor = command_executor, useragent = useragent, driver_iwait = driver_iwait, headless = headless, printoptions = printoptions)
   return driver
 
 def parse_element(driver, elem, collection, channel = None, channelSearchPattern = None, ratingSearchPattern = None, dateSearchPattern = None):
