@@ -35,18 +35,40 @@ sites = [
 
 def cookie_warn_close(driver):
   driver.get("https://www.kink.com")
+  #sleep(10)
   driver.find_element(By.ID, "ccc-close").click()
 
-def kink_main(mongoUri: str, mongoDB: str, site: dict, useragent: str, command_executor: str, driver_iwait: int = 10, headless: bool = True, maxPage: int = 10, initPage: int = 1):
+def kink_loop(db, driver, site: dict, maxPage: int = 10):
+  
+  try:
+    discover_site(db, driver, site, maxPage)
+  except:
+    print("an error occurred")
+  
+
+def kink_main(mongoUri = MONGODB_URI, mongoDB = MONGODB_DATABASE, sites = sites, useragent = SELENIUM_USERAGENT, command_executor = SELENIUM_URI, headless = SELENIUM_HEADLESS, maxPage = DISCOVERY_MAXPAGES, driver_iwait: int = 30, initPage: int = 1):
   # mongodb connection
-  db = init_db(mongoUri, mongoDB)
-  driver = init_driver(useragent, command_executor, driver_iwait, headless = False)
-  sleep(10)
-  cookie_warn_close(driver)
-  sleep(10)
-  discover_site(db, driver, site, maxPage)
-  driver.quit()
+  try:
+    db = init_db(mongoUri, mongoDB)
+  except:
+    print("error setting up db connection")
+    return 1
+  
+  # webdriver
+  try:
+    driver = init_driver(command_executor = command_executor, useragent = useragent, driver_iwait = driver_iwait, headless =  headless)
+  except:
+    print("error setting up webdriver")
+    return 1
+  
+  # cookie closer
+  try:
+    cookie_warn_close(driver)
+  except:
+    print("cookie warning closer failed")
 
-
-for site in sites:
-  kink_main(mongoUri = "MONGODB_URI", mongoDB = "MONGODB_DATABASE", site = site, useragent = "SELENIUM_USERAGENT", command_executor = "SELENIUM_URI", headless = SELENIUM_HEADLESS, maxPage = DISCOVERY_MAXPAGES)
+  for site in sites:
+    try:
+      kink_loop(db = db, driver = driver, site = site, maxPage = maxPage)
+    except:
+      continue
