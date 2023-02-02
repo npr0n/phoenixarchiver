@@ -68,7 +68,7 @@ sites = [
 def vixen_loop(db, driver, site: dict, maxPage: int = 10, verbose: bool = False):
   
   try:
-    discover_site(db = db, driver = driver, site = site, maxPage = maxPage, verbose = verbose)
+    discover_site(db = db, driver = driver, site = site, maxPage = maxPage, navsleep = 1, verbose = verbose)
   except:
     print("an error occurred")
   
