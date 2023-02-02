@@ -56,7 +56,7 @@ def kink_main(mongoUri = MONGODB_URI, mongoDB = MONGODB_DATABASE, sites = sites,
   
   # webdriver
   try:
-    driver = init_driver(command_executor = command_executor, useragent = useragent, driver_iwait = driver_iwait, headless =  headless)
+    driver = init_driver(command_executor = command_executor, useragent = useragent, driver_iwait = driver_iwait, headless = headless)
   except:
     print("error setting up webdriver")
     return 1
