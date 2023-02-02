@@ -36,25 +36,28 @@ def init_default_driver(command_executor = SELENIUM_URI, useragent = SELENIUM_US
   driver = init_driver(command_executor = command_executor, useragent = useragent, driver_iwait = driver_iwait, headless = headless, printoptions = printoptions)
   return driver
 
-def parse_element(driver, elem, collection, channel = None, channelSearchPattern = None, ratingSearchPattern = None, dateSearchPattern = None):
+def parse_element(elem, site):
   result = {}
   result['url'] = elem.get_attribute('href')
   result['id'] = urlparse(result['url']).path.rpartition('/')[-1]
   try:
-    if channel:
-      result['channel'] = channel
-    else: 
-      result['channel'] = elem.find_element(By.XPATH, channelSearchPattern).get_attribute('textContent').lower().replace(' ','').replace(',','').replace("'",'').replace('!','').replace('?','')
+    if site['channel']:
+      result['channel'] = site['channel']
+    else:
+      if site['channelSearchPattern']:
+        result['channel'] = elem.find_element(By.XPATH, site['channelSearchPattern']).get_attribute('textContent').lower().replace(' ','').replace(',','').replace("'",'').replace('!','').replace('?','')
   except:
     pass
   
   try:
-    result['rating'] = elem.find_element(By.XPATH, ratingSearchPattern).get_attribute('textContent')
+    if site['ratingSearchPattern']:
+      result['rating'] = elem.find_element(By.XPATH, site['ratingSearchPattern']).get_attribute('textContent')
   except:
     pass
   
   try:
-    result['datesite'] = elem.find_element(By.XPATH, dateSearchPattern).get_attribute('textContent')
+    if site['dateSearchPattern']:
+      result['datesite'] = elem.find_element(By.XPATH, site['dateSearchPattern']).get_attribute('textContent')
   except:
     pass
 
@@ -88,7 +91,7 @@ def parse_search_pages(driver, site: dict, collection, maxPage: int = 1, pageCou
       elems = driver.find_elements(By.XPATH, site['resultSearchPattern'])
 
       for elem in elems:
-        result = parse_element(driver, elem, site["collection"])
+        result = parse_element(elem, site)
         upsert(collection, result, 'url')
 
     except NoSuchElementException:
