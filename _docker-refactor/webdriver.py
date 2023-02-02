@@ -36,7 +36,7 @@ def init_default_driver(command_executor = SELENIUM_URI, useragent = SELENIUM_US
   driver = init_driver(command_executor = command_executor, useragent = useragent, driver_iwait = driver_iwait, headless = headless, printoptions = printoptions)
   return driver
 
-def parse_element(elem, site):
+def parse_element(elem, site, verbose: bool = False):
   result = {}
   result['url'] = elem.get_attribute('href')
   result['id'] = urlparse(result['url']).path.rpartition('/')[-1]
@@ -46,21 +46,27 @@ def parse_element(elem, site):
     else:
       if site['channelSearchPattern']:
         result['channel'] = elem.find_element(By.XPATH, site['channelSearchPattern']).get_attribute('textContent').lower().replace(' ','').replace(',','').replace("'",'').replace('!','').replace('?','')
+    if verbose:
+      print("channel:", result['channel'])
   except:
     pass
   
   try:
     if site['ratingSearchPattern']:
       result['rating'] = elem.find_element(By.XPATH, site['ratingSearchPattern']).get_attribute('textContent')
+    if verbose:
+      print("channel:", result['rating'])
   except:
     pass
   
   try:
     if site['dateSearchPattern']:
       result['datesite'] = elem.find_element(By.XPATH, site['dateSearchPattern']).get_attribute('textContent')
+    if verbose:
+      print("channel:", result['date'])
   except:
     pass
-
+  
   return result
 
 def navigate_to_next_page(driver, pattern: str, method: str = "XPATH"):
@@ -84,23 +90,37 @@ def navigate_to_next_page(driver, pattern: str, method: str = "XPATH"):
     sleep(1)
     nextPageElement.click()
 
-def parse_search_pages(driver, site: dict, collection, maxPage: int = 1, pageCounter: int = 1):
+def parse_search_pages(driver, site: dict, collection, maxPage: int = 1, pageCounter: int = 1, verbose: bool = False):
   while pageCounter <= maxPage:
+    if verbose:
+      print(driver.current_url)
     
     try:
       elems = driver.find_elements(By.XPATH, site['resultSearchPattern'])
-
+      if verbose:
+        print("found results:", len(elems))
+      
       for elem in elems:
-        result = parse_element(elem, site)
-        upsert(collection, result, 'url')
-
+        # if verbose:
+        #   print("found element:", elem)
+        result = parse_element(elem = elem, site = site, verbose = verbose)
+        if verbose:
+          print("result:", result)
+        upsert(collection = collection, doc = result, key = 'url')
+        if verbose:
+          print("updated db")
+    
     except NoSuchElementException:
       print("no such element exception")
       break
 
     try:
       navigate_to_next_page(driver, site["nextPageSearchPattern"], site["method"])
+      sleep(1)
       pageCounter += 1
+      if verbose:
+        print("page", pageCounter)
+        print("url:", driver.current_url)
     except:
       print("could not navigate further")
       return 0
@@ -109,7 +129,7 @@ def loop_through_sites(db, driver, sites: list, maxPage: int = 1, initPage: int 
   for site in sites:
     discover_site(db, driver, site, maxPage, initPage)
 
-def discover_site(db, driver, site: dict, maxPage: int = 1, initPage: int = 1):
+def discover_site(db, driver, site: dict, maxPage: int = 1, initPage: int = 1, verbose: bool = False):
   
   print("working on site:", site['baseUrl'])
   try:
@@ -118,6 +138,6 @@ def discover_site(db, driver, site: dict, maxPage: int = 1, initPage: int = 1):
     print("could not get page", site['baseUrl'])
   
   try:
-    parse_search_pages(driver, site, db[site['collection']], maxPage, initPage)
+    parse_search_pages(driver = driver, site = site, collection = db[site['collection']], maxPage = maxPage, pageCounter = initPage, verbose = verbose)
   except:
     print("something went wrong in parse_search_pages")
