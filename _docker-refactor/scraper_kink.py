@@ -215,7 +215,12 @@ def kink_scraper_main(mongoUri = MONGODB_URI, mongoDB = MONGODB_DATABASE, sites 
       
       # scrape page and update doc
       try:
-        doc = kink_scraper(driver = driver, doc = doc, verbose = verbose)
+        if doc != None:
+          doc = kink_scraper(driver = driver, doc = doc, verbose = verbose)
+        else:
+          if verbose:
+            print("finished page")
+          break
       except:
         print("error parsing page", driver.current_url)
         break
