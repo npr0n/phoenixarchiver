@@ -69,7 +69,7 @@ def parse_element(elem, site, verbose: bool = False):
   
   return result
 
-def navigate_to_next_page(driver, pattern: str, method: str = "XPATH"):
+def navigate_to_next_page(driver, pattern: str, method: str = "XPATH", scrollOffset: int = 0):
   if method == "LINK_TEXT":
     nextPageElement = driver.find_element(By.LINK_TEXT, pattern)
   elif method == "ID":
@@ -79,6 +79,7 @@ def navigate_to_next_page(driver, pattern: str, method: str = "XPATH"):
 
   actions = ActionChains(driver)
   actions.scroll_to_element(nextPageElement)
+  actions.scroll_by_amount(0, scrollOffset)
   actions.perform()
 
   try:
@@ -90,7 +91,7 @@ def navigate_to_next_page(driver, pattern: str, method: str = "XPATH"):
     sleep(1)
     nextPageElement.click()
 
-def parse_search_pages(driver, site: dict, collection, maxPage: int = 1, pageCounter: int = 1, navsleep: int = 0, verbose: bool = False):
+def parse_search_pages(driver, site: dict, collection, maxPage: int = 1, pageCounter: int = 1, navsleep: int = 0, verbose: bool = False, scrollOffset: int = 0):
   while pageCounter <= maxPage:
     if verbose:
       print(driver.current_url)
@@ -115,7 +116,7 @@ def parse_search_pages(driver, site: dict, collection, maxPage: int = 1, pageCou
       break
 
     try:
-      navigate_to_next_page(driver, site["nextPageSearchPattern"], site["method"])
+      navigate_to_next_page(driver = driver, pattern = site["nextPageSearchPattern"], method = site["method"], scrollOffset = scrollOffset)
       if navsleep != 0:
         sleep(1)
       pageCounter += 1
@@ -130,7 +131,7 @@ def loop_through_sites(db, driver, sites: list, maxPage: int = 1, initPage: int 
   for site in sites:
     discover_site(db, driver, site, maxPage, initPage)
 
-def discover_site(db, driver, site: dict, maxPage: int = 1, initPage: int = 1, navsleep: int = 0, verbose: bool = False):
+def discover_site(db, driver, site: dict, maxPage: int = 1, initPage: int = 1, navsleep: int = 0, verbose: bool = False, scrollOffset: int = 0):
   
   print("working on site:", site['baseUrl'])
   try:
@@ -139,6 +140,6 @@ def discover_site(db, driver, site: dict, maxPage: int = 1, initPage: int = 1, n
     print("could not get page", site['baseUrl'])
   
   try:
-    parse_search_pages(driver = driver, site = site, collection = db[site['collection']], maxPage = maxPage, pageCounter = initPage, navsleep = navsleep, verbose = verbose)
+    parse_search_pages(driver = driver, site = site, collection = db[site['collection']], maxPage = maxPage, pageCounter = initPage, navsleep = navsleep, verbose = verbose, scrollOffset = scrollOffset)
   except:
     print("something went wrong in parse_search_pages")
