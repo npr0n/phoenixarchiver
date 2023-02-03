@@ -3,7 +3,6 @@
 from variables import *
 from webdriver import *
 from database import *
-from discovery_kink import cookie_warn_close
 from datetime import datetime
 from selenium.webdriver.common.by import By
 from selenium.common.exceptions import NoSuchElementException
@@ -11,19 +10,10 @@ from selenium.common.exceptions import TimeoutException
 from time import sleep
 
 sites = [
-  "kink"
+  "vixen"
 ]
 
-def kink_is404(driver):
-  # 404
-  try:
-    if driver.find_element(By.CLASS_NAME, "four-oh-four"):
-      print("got 404 page")
-      return 404
-  except:
-    return 0
-
-def kink_scraper(driver, doc, getmaxtries: int = 1, findmaxtries: int = 1, verbose: bool = False):
+def vixen_scraper(driver, doc, getmaxtries: int = 1, findmaxtries: int = 1, verbose: bool = False):
   # get page
   for attempt in range(getmaxtries):
     try:
@@ -48,7 +38,7 @@ def kink_scraper(driver, doc, getmaxtries: int = 1, findmaxtries: int = 1, verbo
       if verbose:
         print("title", attempt)
       doc['title'] = driver.find_element(By.XPATH, "//head/title").get_attribute("innerText")
-      if "404" in doc['title']:
+      if "Page not found" in doc['title']:
         return doc
     except NoSuchElementException:
       continue
@@ -60,7 +50,7 @@ def kink_scraper(driver, doc, getmaxtries: int = 1, findmaxtries: int = 1, verbo
     try:
       if verbose:
         print("description", attempt)
-      doc['description'] = driver.find_element(By.XPATH, "//span[@class= 'description-text']").get_attribute("innerText")
+      doc['description'] = driver.find_element(By.XPATH, "//div[@data-test-component= 'VideoDescription']/p").get_attribute("innerText")
     except NoSuchElementException:
       continue
     else:
@@ -71,7 +61,7 @@ def kink_scraper(driver, doc, getmaxtries: int = 1, findmaxtries: int = 1, verbo
     try:
       if verbose:
         print("date site format", attempt)
-      doc['datesite'] = driver.find_element(By.XPATH, "//span[@class= 'shoot-date']").get_attribute("innerText")
+      doc['datesite'] = driver.find_element(By.XPATH, "//span[@data-test-component= 'ReleaseDateFormatted']").get_attribute("textContent")
     except NoSuchElementException:
       continue
     else:
@@ -79,43 +69,34 @@ def kink_scraper(driver, doc, getmaxtries: int = 1, findmaxtries: int = 1, verbo
       
   # date (yy.mm.dd)
   try:
-    doc['dateymd'] = datetime.strptime(doc['datesite'], '%b %d, %Y').strftime('%y.%m.%d')
+    doc['dateymd'] = datetime.strptime(doc['datesite'], '%B %d, %Y').strftime('%y.%m.%d')
   except:
     pass
-      
-  # poster url
-  for attempt in range(findmaxtries):
-    try:
-      if verbose:
-        print("posterurl", attempt)
-      doc['posterurl'] = driver.find_element(By.XPATH, "//video[@class= 'vjs-tech']").get_attribute("poster")
-    except NoSuchElementException:
-      try:
-        if verbose:
-          print("posterurl2", attempt)
-        doc['posterurl'] = driver.find_element(By.XPATH, "//div[@class= 'player']/img").get_attribute("src")
-      except:
-        continue
-    else:
-      break
+
+  # poster URL won't work here since the site loads the images with one time keys
+  # # poster url
+  # for attempt in range(findmaxtries):
+  #   try:
+  #     if verbose:
+  #       print("posterurl", attempt)
+  #     doc['posterurl'] = driver.find_element(By.XPATH, "//video[@class= 'vjs-tech']").get_attribute("poster")
+  #   except NoSuchElementException:
+  #     try:
+  #       if verbose:
+  #         print("posterurl2", attempt)
+  #       doc['posterurl'] = driver.find_element(By.XPATH, "//div[@class= 'player']/img").get_attribute("src")
+  #     except:
+  #       continue
+  #   else:
+  #     break
   
-  # channel
-  for attempt in range(findmaxtries):
-    try:
-      if verbose:
-        print("channel", attempt)
-      doc['channel'] = driver.find_element(By.XPATH, "//div[contains(@class, 'shoot-logo')]/a").get_attribute("href").rsplit('/', 1)[-1]
-    except NoSuchElementException:
-      continue
-    else:
-      break
   
   # director
   for attempt in range(findmaxtries):
     try:
       if verbose:
         print("director", attempt)
-      doc['director'] = driver.find_element(By.XPATH, "//span[@class= 'director-name']").get_attribute("innerText")
+      doc['director'] = driver.find_element(By.XPATH, "//span[@data-test-component= 'DirectorText']").get_attribute("innerText")
     except NoSuchElementException:
       continue
     else:
@@ -126,7 +107,7 @@ def kink_scraper(driver, doc, getmaxtries: int = 1, findmaxtries: int = 1, verbo
     try:
       if verbose:
         print("rating", attempt)
-      doc['rating'] = driver.find_element(By.XPATH, "//div[contains(@class, 'shoot-info')]//span[contains(@class, 'thumb-up-percentage')]").get_attribute("innerText")
+      doc['rating'] = driver.find_element(By.XPATH, "//span[@data-test-component= 'RatingNumber']").get_attribute("innerText")
     except NoSuchElementException:
       continue
     else:
@@ -137,8 +118,8 @@ def kink_scraper(driver, doc, getmaxtries: int = 1, findmaxtries: int = 1, verbo
     try:
       if verbose:
         print("actors", attempt)
-      for actor in (driver.find_elements(By.XPATH, "//p[@class= 'starring']/span[contains(@class, 'names')]/a")):
-        actors.append(actor.get_attribute("innerText").split(',', 1)[0])
+      for actor in (driver.find_elements(By.XPATH, "//div[@data-test-component= 'VideoModels']/a")):
+        actors.append(actor.get_attribute("textContent"))
       doc['actors'] = actors
     except NoSuchElementException:
       continue
@@ -150,8 +131,8 @@ def kink_scraper(driver, doc, getmaxtries: int = 1, findmaxtries: int = 1, verbo
     try:
       if verbose:
         print("categories", attempt)
-      for category in (driver.find_elements(By.XPATH, "//a[@class= 'tag']")):
-        categories.append(category.get_attribute("innerText"))
+      for category in (driver.find_element(By.XPATH, "//html/head/meta[@name= 'keywords']").get_attribute("content").split(', ')):
+        categories.append(category.title())
       doc['categories'] = categories
     except NoSuchElementException:
       continue
@@ -164,7 +145,7 @@ def kink_scraper(driver, doc, getmaxtries: int = 1, findmaxtries: int = 1, verbo
   return doc
 
 
-def kink_scraper_main(mongoUri = MONGODB_URI, mongoDB = MONGODB_DATABASE, sites = sites, useragent = SELENIUM_USERAGENT, command_executor = SELENIUM_URI, headless = SELENIUM_HEADLESS, driver_iwait: int = 10, verbose: bool = False):
+def vixen_scraper_main(mongoUri = MONGODB_URI, mongoDB = MONGODB_DATABASE, sites = sites, useragent = SELENIUM_USERAGENT, command_executor = SELENIUM_URI, headless = SELENIUM_HEADLESS, driver_iwait: int = 10, verbose: bool = False):
   # mongodb connection
   try:
     if verbose:
@@ -183,14 +164,6 @@ def kink_scraper_main(mongoUri = MONGODB_URI, mongoDB = MONGODB_DATABASE, sites 
     print("error setting up webdriver")
     return 1
   
-  # cookie closer
-  try:
-    if verbose:
-      print("closing cookie warning")
-    cookie_warn_close(driver)
-  except:
-    print("cookie warning closer failed")
-
   for site in sites:
     # set mongo collection
     try:
@@ -216,7 +189,7 @@ def kink_scraper_main(mongoUri = MONGODB_URI, mongoDB = MONGODB_DATABASE, sites 
       # scrape page and update doc
       try:
         if doc != None:
-          doc = kink_scraper(driver = driver, doc = doc, verbose = verbose)
+          doc = vixen_scraper(driver = driver, doc = doc, verbose = verbose)
         else:
           if verbose:
             print("finished page")
