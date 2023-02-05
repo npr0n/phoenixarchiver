@@ -69,14 +69,41 @@ def parse_element(elem, site, verbose: bool = False):
   
   return result
 
-def navigate_to_next_page(driver, pattern: str, method: str = "XPATH", scrollOffset: int = 0):
+def count_to_next_page(driver, pattern: str = "", splitpattern: str = "/"):
+  if pattern != "":
+    try:
+      nextPageElement = driver.find_element(By.XPATH, pattern)
+      if nextPageElement == None:
+        return 1
+    except:
+      return 1
+  
+  try:
+    urlparts = driver.current_url.rsplit(splitpattern, 1)
+    pagenumber = int(urlparts[-1]) + 1
+    url = urlparts[0] + splitpattern + str(pagenumber)
+    driver.get(url)
+  except:
+    return 1
+
+
+def navigate_to_next_page(driver, pattern: str = "", method: str = "XPATH", scrollOffset: int = 0, splitpattern: str = "="):
   if method == "LINK_TEXT":
     nextPageElement = driver.find_element(By.LINK_TEXT, pattern)
   elif method == "ID":
     nextPageElement = driver.find_element(By.ID, pattern)
-  else:
+  elif method == "XPATH":
     nextPageElement = driver.find_element(By.XPATH, pattern)
-
+  elif method == "COUNT":
+    try:
+      count_to_next_page(driver = driver, pattern = pattern, splitpattern = splitpattern)
+    except:
+      return 1
+    return 0
+  else:
+    print("invalid navigation method")
+    return 1
+  
   actions = ActionChains(driver)
   actions.scroll_to_element(nextPageElement)
   actions.scroll_by_amount(0, scrollOffset)
