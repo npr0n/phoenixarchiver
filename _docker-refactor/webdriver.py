@@ -87,7 +87,7 @@ def count_to_next_page(driver, pattern: str = "", splitpattern: str = "/"):
     return 1
 
 
-def navigate_to_next_page(driver, pattern: str = "", method: str = "XPATH", scrollOffset: int = 0, splitpattern: str = "="):
+def navigate_to_next_page(driver, pattern: str = "", method: str = "XPATH", scrollOffset: int = 0, splitpattern: str = "=", navsleep: int = 0):
   if method == "LINK_TEXT":
     nextPageElement = driver.find_element(By.LINK_TEXT, pattern)
   elif method == "ID":
@@ -108,6 +108,8 @@ def navigate_to_next_page(driver, pattern: str = "", method: str = "XPATH", scro
   actions.scroll_to_element(nextPageElement)
   actions.scroll_by_amount(0, scrollOffset)
   actions.perform()
+  
+  sleep(navsleep)
 
   try:
     nextPageElement.click()
@@ -143,9 +145,8 @@ def parse_search_pages(driver, site: dict, collection, maxPage: int = 1, pageCou
       break
 
     try:
-      navigate_to_next_page(driver = driver, pattern = site["nextPageSearchPattern"], method = site["method"], scrollOffset = scrollOffset)
-      if navsleep != 0:
-        sleep(1)
+      navigate_to_next_page(driver = driver, pattern = site["nextPageSearchPattern"], method = site["method"], scrollOffset = scrollOffset, navsleep = navsleep)
+      sleep(navsleep)
       pageCounter += 1
       if verbose:
         print("page", pageCounter)
