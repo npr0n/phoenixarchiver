@@ -38,7 +38,7 @@ def cookie_warn_close(driver):
   #sleep(10)
   driver.find_element(By.ID, "ccc-close").click()
 
-def kink_loop(db, driver, site: dict, maxPage: int = 10):
+def kink_discovery_loop(db, driver, site: dict, maxPage: int = 10):
   
   try:
     discover_site(db, driver, site, maxPage)
@@ -46,7 +46,7 @@ def kink_loop(db, driver, site: dict, maxPage: int = 10):
     print("an error occurred")
   
 
-def kink_main(mongoUri = MONGODB_URI, mongoDB = MONGODB_DATABASE, sites = sites, useragent = SELENIUM_USERAGENT, command_executor = SELENIUM_URI, headless = SELENIUM_HEADLESS, maxPage = DISCOVERY_MAXPAGES, driver_iwait: int = 30, initPage: int = 1):
+def kink_discovery_main(mongoUri = MONGODB_URI, mongoDB = MONGODB_DATABASE, sites = sites, useragent = SELENIUM_USERAGENT, command_executor = SELENIUM_URI, headless = SELENIUM_HEADLESS, maxPage = DISCOVERY_MAXPAGES, driver_iwait: int = 30, initPage: int = 1):
   # mongodb connection
   try:
     db = init_db(mongoUri, mongoDB)
@@ -69,7 +69,7 @@ def kink_main(mongoUri = MONGODB_URI, mongoDB = MONGODB_DATABASE, sites = sites,
 
   for site in sites:
     try:
-      kink_loop(db = db, driver = driver, site = site, maxPage = maxPage)
+      kink_discovery_loop(db = db, driver = driver, site = site, maxPage = maxPage)
     except:
       continue
   

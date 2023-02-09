@@ -72,7 +72,7 @@ sites = [
 
 
 
-def brazzers_loop(db, driver, site: dict, maxPage: int = 10, scrollOffset: int = 0):
+def brazzers_discovery_loop(db, driver, site: dict, maxPage: int = 10, scrollOffset: int = 0):
   
   try:
     discover_site(db = db, driver = driver, site = site, maxPage = maxPage, scrollOffset = scrollOffset)
@@ -80,7 +80,7 @@ def brazzers_loop(db, driver, site: dict, maxPage: int = 10, scrollOffset: int =
     print("an error occurred")
 
 
-def brazzers_main(mongoUri = MONGODB_URI, mongoDB = MONGODB_DATABASE, sites = sites, useragent = SELENIUM_USERAGENT, command_executor = SELENIUM_URI, headless = SELENIUM_HEADLESS, maxPage = DISCOVERY_MAXPAGES, driver_iwait: int = 30, initPage: int = 1, scrollOffset: int = 50):
+def brazzers_discovery_main(mongoUri = MONGODB_URI, mongoDB = MONGODB_DATABASE, sites = sites, useragent = SELENIUM_USERAGENT, command_executor = SELENIUM_URI, headless = SELENIUM_HEADLESS, maxPage = DISCOVERY_MAXPAGES, driver_iwait: int = 30, initPage: int = 1, scrollOffset: int = 50):
   # mongodb connection
   try:
     db = init_db(mongoUri, mongoDB)
@@ -97,7 +97,7 @@ def brazzers_main(mongoUri = MONGODB_URI, mongoDB = MONGODB_DATABASE, sites = si
   
   for site in sites:
     try:
-      brazzers_loop(db = db, driver = driver, site = site, maxPage = maxPage, scrollOffset = scrollOffset)
+      brazzers_discovery_loop(db = db, driver = driver, site = site, maxPage = maxPage, scrollOffset = scrollOffset)
     except:
       continue
   

@@ -65,7 +65,7 @@ sites = [
 }
 ]
 
-def vixen_loop(db, driver, site: dict, maxPage: int = 10, verbose: bool = False):
+def vixen_discovery_loop(db, driver, site: dict, maxPage: int = 10, verbose: bool = False):
   
   try:
     discover_site(db = db, driver = driver, site = site, maxPage = maxPage, navsleep = 1, verbose = verbose)
@@ -73,7 +73,7 @@ def vixen_loop(db, driver, site: dict, maxPage: int = 10, verbose: bool = False)
     print("an error occurred")
   
 
-def vixen_main(mongoUri = MONGODB_URI, mongoDB = MONGODB_DATABASE, sites = sites, useragent = SELENIUM_USERAGENT, command_executor = SELENIUM_URI, headless = SELENIUM_HEADLESS, maxPage = DISCOVERY_MAXPAGES, driver_iwait: int = 30, initPage: int = 1, verbose: bool = False):
+def vixen_discovery_main(mongoUri = MONGODB_URI, mongoDB = MONGODB_DATABASE, sites = sites, useragent = SELENIUM_USERAGENT, command_executor = SELENIUM_URI, headless = SELENIUM_HEADLESS, maxPage = DISCOVERY_MAXPAGES, driver_iwait: int = 30, initPage: int = 1, verbose: bool = False):
   # mongodb connection
   try:
     db = init_db(mongoUri, mongoDB)
@@ -90,7 +90,7 @@ def vixen_main(mongoUri = MONGODB_URI, mongoDB = MONGODB_DATABASE, sites = sites
   
   for site in sites:
     try:
-      vixen_loop(db = db, driver = driver, site = site, maxPage = maxPage, verbose = verbose)
+      vixen_discovery_loop(db = db, driver = driver, site = site, maxPage = maxPage, verbose = verbose)
     except:
       continue
   

@@ -22,7 +22,7 @@ def cookie_warn_close(driver):
   sleep(5)
   driver.find_element(By.ID, "cookie-dismiss-button").click()
 
-def mylf_loop(db, driver, site: dict, maxPage: int = 10, verbose: bool = False):
+def mylf_discovery_loop(db, driver, site: dict, maxPage: int = 10, verbose: bool = False):
   
   try:
     discover_site(db = db, driver = driver, site = site, maxPage = maxPage, navsleep = 1, verbose = verbose)
@@ -30,7 +30,7 @@ def mylf_loop(db, driver, site: dict, maxPage: int = 10, verbose: bool = False):
     print("an error occurred")
   
 
-def mylf_main(mongoUri = MONGODB_URI, mongoDB = MONGODB_DATABASE, sites = sites, useragent = SELENIUM_USERAGENT, command_executor = SELENIUM_URI, headless = SELENIUM_HEADLESS, maxPage = DISCOVERY_MAXPAGES, driver_iwait: int = 30, initPage: int = 1, verbose: bool = False):
+def mylf_discovery_main(mongoUri = MONGODB_URI, mongoDB = MONGODB_DATABASE, sites = sites, useragent = SELENIUM_USERAGENT, command_executor = SELENIUM_URI, headless = SELENIUM_HEADLESS, maxPage = DISCOVERY_MAXPAGES, driver_iwait: int = 30, initPage: int = 1, verbose: bool = False):
   # mongodb connection
   try:
     db = init_db(mongoUri, mongoDB)
@@ -53,7 +53,7 @@ def mylf_main(mongoUri = MONGODB_URI, mongoDB = MONGODB_DATABASE, sites = sites,
   
   for site in sites:
     try:
-      mylf_loop(db = db, driver = driver, site = site, maxPage = maxPage, verbose = verbose)
+      mylf_discovery_loop(db = db, driver = driver, site = site, maxPage = maxPage, verbose = verbose)
     except:
       continue
   
