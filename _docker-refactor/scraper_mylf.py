@@ -3,6 +3,7 @@
 from variables import *
 from webdriver import *
 from database import *
+from discovery_mylf import cookie_warn_close
 from datetime import datetime
 from selenium.webdriver.common.by import By
 from selenium.common.exceptions import NoSuchElementException
@@ -10,11 +11,10 @@ from selenium.common.exceptions import TimeoutException
 from time import sleep
 
 sites = [
-  "brazzers",
-  "brazzers_collections"
+  "mylf"
 ]
 
-def brazzers_scraper(driver, doc, getmaxtries: int = 1, findmaxtries: int = 1, verbose: bool = False):
+def mylf_scraper(driver, doc, getmaxtries: int = 1, findmaxtries: int = 1, verbose: bool = False):
   # get page
   for attempt in range(getmaxtries):
     try:
@@ -38,8 +38,9 @@ def brazzers_scraper(driver, doc, getmaxtries: int = 1, findmaxtries: int = 1, v
     try:
       if verbose:
         print("title", attempt)
-      doc['title'] = driver.find_element(By.XPATH, "//div[@aria-atomic= 'true']//h2[contains(@class, 'font-secondary')]").get_attribute("textContent")
-      if "404" in doc['title']:
+      doc['title'] = driver.find_element(By.XPATH, "//head/title").get_attribute("innerText")
+      if 'https://www.mylf.com/not-found/' in driver.current_url:
+        print("url is invalid (404):", driver.current_url)
         return doc
     except NoSuchElementException:
       continue
@@ -51,7 +52,7 @@ def brazzers_scraper(driver, doc, getmaxtries: int = 1, findmaxtries: int = 1, v
     try:
       if verbose:
         print("description", attempt)
-      doc['description'] = driver.find_element(By.XPATH, "//section/div/p").get_attribute("innerText")
+      doc['description'] = driver.find_element(By.XPATH, "//div[contains(@class, 'sceneDesc')]").get_attribute("innerText")
     except NoSuchElementException:
       continue
     else:
@@ -62,7 +63,7 @@ def brazzers_scraper(driver, doc, getmaxtries: int = 1, findmaxtries: int = 1, v
     try:
       if verbose:
         print("date site format", attempt)
-      doc['datesite'] = driver.find_element(By.XPATH, "//div[@aria-atomic= 'true']//h2[contains(@class, 'font-secondary')]/preceding-sibling::div[1]").get_attribute("innerText")
+      doc['datesite'] = driver.find_element(By.XPATH, "//div[contains(@class, 'sceneDate')]").get_attribute("innerText")
     except NoSuchElementException:
       continue
     else:
@@ -70,7 +71,7 @@ def brazzers_scraper(driver, doc, getmaxtries: int = 1, findmaxtries: int = 1, v
       
   # date (yy.mm.dd)
   try:
-    doc['dateymd'] = datetime.strptime(doc['datesite'], '%B %d, %Y').strftime('%y.%m.%d')
+    doc['dateymd'] = datetime.strptime(doc['datesite'], '%m/%d/%Y').strftime('%y.%m.%d')
   except:
     pass
       
@@ -79,18 +80,18 @@ def brazzers_scraper(driver, doc, getmaxtries: int = 1, findmaxtries: int = 1, v
     try:
       if verbose:
         print("posterurl", attempt)
-      doc['posterurl'] = driver.find_element(By.XPATH, "//div[@class= 'vjs-poster']").value_of_css_property('background-image').split('"')[1]
+      doc['posterurl'] = driver.find_element(By.XPATH, "//div/stream[@title= 'video-player']").get_dom_attribute("poster")
     except NoSuchElementException:
       continue
     else:
       break
   
-  # rating
+  # channel
   for attempt in range(findmaxtries):
     try:
       if verbose:
-        print("rating", attempt)
-      doc['rating'] = driver.find_element(By.XPATH, "//div[@aria-atomic= 'true']//h2[contains(@class, 'font-secondary')]/preceding-sibling::div/span/div/span").get_attribute("innerText")
+        print("channel", attempt)
+      doc['channel'] = driver.find_element(By.XPATH, "//div[contains(@class, 'site-name')]/a").get_attribute("href").rsplit('/', 1)[-1]
     except NoSuchElementException:
       continue
     else:
@@ -101,8 +102,8 @@ def brazzers_scraper(driver, doc, getmaxtries: int = 1, findmaxtries: int = 1, v
     try:
       if verbose:
         print("actors", attempt)
-      for actor in (driver.find_elements(By.XPATH, "//div[@aria-atomic= 'true']//h2[contains(@class, 'font-secondary')]/parent::div/div/span/a")):
-        actors.append(actor.get_attribute("innerText").split(',', 1)[0])
+      for actor in (driver.find_elements(By.XPATH, "//div[contains(@class, 'contentTitle')]/a[@class= 'model-name-link']")):
+        actors.append(actor.get_attribute("innerText"))
       doc['actors'] = actors
     except NoSuchElementException:
       continue
@@ -114,20 +115,9 @@ def brazzers_scraper(driver, doc, getmaxtries: int = 1, findmaxtries: int = 1, v
     try:
       if verbose:
         print("categories", attempt)
-      for category in (driver.find_elements(By.XPATH, "//div[contains(@style, 'overflow: hidden;')]/div/a")):
-        categories.append(category.get_attribute("innerText"))
+      for category in (driver.find_elements(By.XPATH, "//div[contains(@class, 'tags-container')]/a[contains(@href, '/search')]")):
+        categories.append(category.get_attribute("innerText").split(",")[0])
       doc['categories'] = categories
-    except NoSuchElementException:
-      continue
-    else:
-      break
-
-  # collection title
-  for attempt in range(findmaxtries):
-    try:
-      h2text = driver.find_element(By.XPATH, "//div[@aria-atomic= 'true']/preceding-sibling::div/div/h2").get_attribute("textContent")
-      if (h2text.split()[-1].lower() == "episodes" ):
-        doc['collectiontitle'] = h2text.rsplit(' ', 1)[0]
     except NoSuchElementException:
       continue
     else:
@@ -139,7 +129,7 @@ def brazzers_scraper(driver, doc, getmaxtries: int = 1, findmaxtries: int = 1, v
   return doc
 
 
-def brazzers_scraper_main(mongoUri = MONGODB_URI, mongoDB = MONGODB_DATABASE, sites = sites, useragent = SELENIUM_USERAGENT, command_executor = SELENIUM_URI, headless = SELENIUM_HEADLESS, driver_iwait: int = 10, verbose: bool = False):
+def mylf_scraper_main(mongoUri = MONGODB_URI, mongoDB = MONGODB_DATABASE, sites = sites, useragent = SELENIUM_USERAGENT, command_executor = SELENIUM_URI, headless = SELENIUM_HEADLESS, driver_iwait: int = 10, verbose: bool = False):
   # mongodb connection
   try:
     if verbose:
@@ -158,6 +148,14 @@ def brazzers_scraper_main(mongoUri = MONGODB_URI, mongoDB = MONGODB_DATABASE, si
     print("error setting up webdriver")
     return 1
   
+  # cookie closer
+  try:
+    if verbose:
+      print("closing cookie warning")
+    cookie_warn_close(driver)
+  except:
+    print("cookie warning closer failed")
+
   for site in sites:
     # set mongo collection
     try:
@@ -183,7 +181,7 @@ def brazzers_scraper_main(mongoUri = MONGODB_URI, mongoDB = MONGODB_DATABASE, si
       # scrape page and update doc
       try:
         if doc != None:
-          doc = brazzers_scraper(driver = driver, doc = doc, verbose = verbose)
+          doc = mylf_scraper(driver = driver, doc = doc, verbose = verbose)
         else:
           if verbose:
             print("finished page")
