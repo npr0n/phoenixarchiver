@@ -15,7 +15,9 @@ sites = [
   "method": "ID",
   "collection": "bangbros",
   "channelSearchPattern": "..//a[contains(@class, 'thmb_mr_lnk')]",
-  "dateSearchPattern": "..//span[contains(@class, 'thmb_mr_2')]/span[contains(@class, 'faTxt')]"
+  "channelSearchAttribute": "innerText",
+  "dateSearchPattern": "..//span[contains(@class, 'thmb_mr_2')]/span[contains(@class, 'faTxt')]",
+  "dateSearchAttribute": "innerText"
 }
 ]
 

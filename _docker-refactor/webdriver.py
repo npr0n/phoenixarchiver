@@ -45,7 +45,7 @@ def parse_element(elem, site, verbose: bool = False):
       result['channel'] = site['channel']
     else:
       if site['channelSearchPattern']:
-        result['channel'] = elem.find_element(By.XPATH, site['channelSearchPattern']).get_attribute('textContent').lower().replace(' ','').replace(',','').replace("'",'').replace('!','').replace('?','')
+        result['channel'] = elem.find_element(By.XPATH, site['channelSearchPattern']).get_attribute(site['ratingSearchAttribute']).lower().replace(' ','').replace(',','').replace("'",'').replace('!','').replace('?','')
     if verbose:
       print("channel:", result['channel'])
   except:
@@ -53,7 +53,7 @@ def parse_element(elem, site, verbose: bool = False):
   
   try:
     if site['ratingSearchPattern']:
-      result['rating'] = elem.find_element(By.XPATH, site['ratingSearchPattern']).get_attribute('textContent')
+      result['rating'] = elem.find_element(By.XPATH, site['ratingSearchPattern']).get_attribute(site['ratingSearchAttribute'])
     if verbose:
       print("channel:", result['rating'])
   except:
@@ -61,7 +61,7 @@ def parse_element(elem, site, verbose: bool = False):
   
   try:
     if site['dateSearchPattern']:
-      result['datesite'] = elem.find_element(By.XPATH, site['dateSearchPattern']).get_attribute('textContent')
+      result['datesite'] = elem.find_element(By.XPATH, site['dateSearchPattern']).get_attribute(site['dateSearchAttribute'])
     if verbose:
       print("channel:", result['date'])
   except:
