@@ -2,3 +2,7 @@ mongo.sh
 testfile.*
 __pycache__
 *.env
+Dockerfile
+requirements.txt
+compose.yaml
+
