@@ -1,13 +1,11 @@
 #!/usr/bin/python3
 
 from variables import *
-from webdriver import *
-from database import *
-from time import sleep
+from wdriver import *
+from dbase import *
 
 ### SITE CONFIG ###
 sites = [
-
 {
   "baseUrl": "https://bangbros.com/videos/1",
   "resultSearchPattern": "//a[contains(@class, 'thmb_lnk')]",
@@ -30,7 +28,7 @@ def bangbros_discovery_loop(db, driver, site: dict, maxPage: int = 10):
     print("an error occurred")
   
 
-def bangbros_discovery_main(mongoUri = MONGODB_URI, mongoDB = MONGODB_DATABASE, sites = sites, useragent = SELENIUM_USERAGENT, command_executor = SELENIUM_URI, headless = SELENIUM_HEADLESS, maxPage = DISCOVERY_MAXPAGES, driver_iwait: int = 30, initPage: int = 1):
+def main(mongoUri = MONGODB_URI, mongoDB = MONGODB_DATABASE, sites = sites, useragent = SELENIUM_USERAGENT, command_executor = SELENIUM_URI, headless = SELENIUM_HEADLESS, maxPage = DISCOVERY_MAXPAGES, driver_iwait: int = 30, initPage: int = 1, verbose: bool = False):
   # mongodb connection
   try:
     db = init_db(mongoUri, mongoDB)
@@ -52,3 +50,6 @@ def bangbros_discovery_main(mongoUri = MONGODB_URI, mongoDB = MONGODB_DATABASE, 
       continue
   
   driver.quit()
+
+if __name__ == "__main__":
+  main()

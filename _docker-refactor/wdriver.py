@@ -1,8 +1,8 @@
 #!/usr/bin/python3
 
 from variables import *
-from database import *
-from selenium import webdriver as wd
+from dbase import *
+from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.action_chains import ActionChains
 from selenium.common.exceptions import NoSuchElementException
@@ -16,7 +16,7 @@ def get_useragent(driver):
 
 def init_driver(command_executor: str, useragent: str = "", driver_iwait: int = 10, headless: bool = True, printoptions: bool = False):
   
-  options = wd.ChromeOptions()
+  options = webdriver.ChromeOptions()
   if headless:
     options.headless = True
     options.add_argument('disable-gpu')
@@ -27,7 +27,7 @@ def init_driver(command_executor: str, useragent: str = "", driver_iwait: int = 
   if printoptions:
     print(options.arguments)
   
-  driver = wd.Remote(command_executor = command_executor, options = options)
+  driver = webdriver.Remote(command_executor = command_executor, options = options)
   driver.implicitly_wait(driver_iwait)
   
   return(driver)
