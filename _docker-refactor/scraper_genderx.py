@@ -119,7 +119,7 @@ def genderx_scraper(driver, doc, getmaxtries: int = 1, findmaxtries: int = 1, ve
   return doc
 
 
-def genderx_scraper_main(mongoUri = MONGODB_URI, mongoDB = MONGODB_DATABASE, sites = sites, useragent = SELENIUM_USERAGENT, command_executor = SELENIUM_URI, headless = SELENIUM_HEADLESS, driver_iwait: int = 10, verbose: bool = False):
+def main(mongoUri = MONGODB_URI, mongoDB = MONGODB_DATABASE, sites = sites, useragent = SELENIUM_USERAGENT, command_executor = SELENIUM_URI, headless = SELENIUM_HEADLESS, driver_iwait: int = 10, verbose: bool = False):
   # mongodb connection
   try:
     if verbose:
@@ -192,3 +192,6 @@ def genderx_scraper_main(mongoUri = MONGODB_URI, mongoDB = MONGODB_DATABASE, sit
     sleep(30)
   
   driver.quit()
+
+if __name__ == "__main__":
+  main()

@@ -1,8 +1,8 @@
 #!/usr/bin/python3
 
 from variables import *
-from webdriver import *
-from database import *
+import wdriver
+import dbase
 from discovery_kink import cookie_warn_close
 from datetime import datetime
 from selenium.webdriver.common.by import By
@@ -164,12 +164,12 @@ def kink_scraper(driver, doc, getmaxtries: int = 1, findmaxtries: int = 1, verbo
   return doc
 
 
-def kink_scraper_main(mongoUri = MONGODB_URI, mongoDB = MONGODB_DATABASE, sites = sites, useragent = SELENIUM_USERAGENT, command_executor = SELENIUM_URI, headless = SELENIUM_HEADLESS, driver_iwait: int = 10, verbose: bool = False):
+def main(mongoUri = MONGODB_URI, mongoDB = MONGODB_DATABASE, sites = sites, useragent = SELENIUM_USERAGENT, command_executor = SELENIUM_URI, headless = SELENIUM_HEADLESS, driver_iwait: int = 10, verbose: bool = False):
   # mongodb connection
   try:
     if verbose:
       print("setting up db connection")
-    db = init_db(mongoUri, mongoDB)
+    db = dbase.init_db(mongoUri, mongoDB)
   except:
     print("error setting up db connection")
     return 1
@@ -178,7 +178,7 @@ def kink_scraper_main(mongoUri = MONGODB_URI, mongoDB = MONGODB_DATABASE, sites 
   try:
     if verbose:
       print("starting webdriver")
-    driver = init_driver(command_executor = command_executor, useragent = useragent, driver_iwait = driver_iwait, headless =  headless)
+    driver = wdriver.init_driver(command_executor = command_executor, useragent = useragent, driver_iwait = driver_iwait, headless =  headless)
   except:
     print("error setting up webdriver")
     return 1
@@ -202,7 +202,7 @@ def kink_scraper_main(mongoUri = MONGODB_URI, mongoDB = MONGODB_DATABASE, sites 
     while True:
       # find database entry without title
       try:
-        doc = find_one_no_title(collection)
+        doc = dbase.find_one_no_title(collection)
         if verbose:
           if doc == None:
             print("did not find entry without title")
@@ -227,7 +227,7 @@ def kink_scraper_main(mongoUri = MONGODB_URI, mongoDB = MONGODB_DATABASE, sites 
 
       # update database entry
       try:
-        upsert(collection = collection, doc = doc, key = "_id")
+        dbase.upsert(collection = collection, doc = doc, key = "_id")
         if verbose:
           print("updated db entry")
       except:
@@ -237,3 +237,6 @@ def kink_scraper_main(mongoUri = MONGODB_URI, mongoDB = MONGODB_DATABASE, sites 
     sleep(30)
   
   driver.quit()
+
+if __name__ == "__main__":
+  main()
