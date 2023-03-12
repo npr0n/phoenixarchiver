@@ -1,8 +1,8 @@
 #!/usr/bin/python3
 
 from variables import *
-from webdriver import *
-from database import *
+import wdriver
+import dbase
 from time import sleep
 
 ### SITE CONFIG ###
@@ -25,22 +25,22 @@ def cookie_warn_close(driver):
 def mylf_discovery_loop(db, driver, site: dict, maxPage: int = 10, verbose: bool = False):
   
   try:
-    discover_site(db = db, driver = driver, site = site, maxPage = maxPage, navsleep = 1, verbose = verbose)
+    wdriver.discover_site(db = db, driver = driver, site = site, maxPage = maxPage, navsleep = 1, verbose = verbose)
   except:
     print("an error occurred")
   
 
-def mylf_discovery_main(mongoUri = MONGODB_URI, mongoDB = MONGODB_DATABASE, sites = sites, useragent = SELENIUM_USERAGENT, command_executor = SELENIUM_URI, headless = SELENIUM_HEADLESS, maxPage = DISCOVERY_MAXPAGES, driver_iwait: int = 30, initPage: int = 1, verbose: bool = False):
+def main(mongoUri = MONGODB_URI, mongoDB = MONGODB_DATABASE, sites = sites, useragent = SELENIUM_USERAGENT, command_executor = SELENIUM_URI, headless = SELENIUM_HEADLESS, maxPage = DISCOVERY_MAXPAGES, driver_iwait: int = 30, initPage: int = 1, verbose: bool = False):
   # mongodb connection
   try:
-    db = init_db(mongoUri, mongoDB)
+    db = dbase.init_db(mongoUri, mongoDB)
   except:
     print("error setting up db connection")
     return 1
   
   # webdriver
   try:
-    driver = init_driver(command_executor = command_executor, useragent = useragent, driver_iwait = driver_iwait, headless = headless)
+    driver = wdriver.init_driver(command_executor = command_executor, useragent = useragent, driver_iwait = driver_iwait, headless = headless)
   except:
     print("error setting up webdriver")
     return 1
@@ -58,3 +58,6 @@ def mylf_discovery_main(mongoUri = MONGODB_URI, mongoDB = MONGODB_DATABASE, site
       continue
   
   driver.quit()
+
+if __name__ == "__main__":
+  main()

@@ -1,8 +1,8 @@
 #!/usr/bin/python3
 
 from variables import *
-from wdriver import *
-from dbase import *
+import wdriver
+import dbase
 
 ### SITE CONFIG ###
 sites = [
@@ -23,7 +23,7 @@ sites = [
 def bangbros_discovery_loop(db, driver, site: dict, maxPage: int = 10):
   
   try:
-    discover_site(db = db, driver = driver, site = site, maxPage = maxPage, navsleep = 1, scrollOffset = 30)
+    wdriver.discover_site(db = db, driver = driver, site = site, maxPage = maxPage, navsleep = 1, scrollOffset = 30)
   except:
     print("an error occurred")
   
@@ -31,14 +31,14 @@ def bangbros_discovery_loop(db, driver, site: dict, maxPage: int = 10):
 def main(mongoUri = MONGODB_URI, mongoDB = MONGODB_DATABASE, sites = sites, useragent = SELENIUM_USERAGENT, command_executor = SELENIUM_URI, headless = SELENIUM_HEADLESS, maxPage = DISCOVERY_MAXPAGES, driver_iwait: int = 30, initPage: int = 1, verbose: bool = False):
   # mongodb connection
   try:
-    db = init_db(mongoUri, mongoDB)
+    db = dbase.init_db(mongoUri, mongoDB)
   except:
     print("error setting up db connection")
     return 1
   
   # webdriver
   try:
-    driver = init_driver(command_executor = command_executor, useragent = useragent, driver_iwait = driver_iwait, headless = headless)
+    driver = wdriver.init_driver(command_executor = command_executor, useragent = useragent, driver_iwait = driver_iwait, headless = headless)
   except:
     print("error setting up webdriver")
     return 1
