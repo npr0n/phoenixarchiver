@@ -31,13 +31,6 @@ def cookie_warn_close(driver):
   driver.get("https://www.genderxfilms.com/en/videos")
   sleep(10)
   driver.find_element(By.CLASS_NAME, "cookieConsentBtn").click()
-
-def genderx_discovery_loop(db, driver, site: dict, maxPage: int = 10):
-  
-  try:
-    wdriver.discover_site(db = db, driver = driver, site = site, maxPage = maxPage, navsleep = 1, scrollOffset = 200, prenavsleep = 5)
-  except:
-    print("an error occurred")
   
 
 def main(mongoUri = MONGODB_URI, mongoDB = MONGODB_DATABASE, sites = sites, useragent = SELENIUM_USERAGENT, command_executor = SELENIUM_URI, headless = SELENIUM_HEADLESS, maxPage = DISCOVERY_MAXPAGES, driver_iwait: int = 30, initPage: int = 1):
@@ -63,7 +56,7 @@ def main(mongoUri = MONGODB_URI, mongoDB = MONGODB_DATABASE, sites = sites, user
 
   for site in sites:
     try:
-      genderx_discovery_loop(db = db, driver = driver, site = site, maxPage = maxPage)
+      wdriver.discover_site(db = db, driver = driver, site = site, maxPage = maxPage, navsleep = 1, scrollOffset = 200, prenavsleep = 5)
     except:
       continue
   

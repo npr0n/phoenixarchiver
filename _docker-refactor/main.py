@@ -1,32 +1,29 @@
 #!/usr/bin/python3
 
-import discovery_bangbros
-import discovery_brazzers
 import discovery_genderx
-import discovery_kink
 import discovery_mylf
 import discovery_vixen
 
-import scraper_bangbros
-import scraper_brazzers
+import bangbros
+import brazzers
 import scraper_genderx
-import scraper_kink
+import kink
 import scraper_mylf
 import scraper_vixen
 
 def discoverSites():
-  discovery_bangbros.main()
-  discovery_brazzers.main()
+  bangbros.discovery()
+  brazzers.discovery()
   discovery_genderx.main()
-  discovery_kink.main()
+  kink.discovery()
   discovery_mylf.main()
   discovery_vixen.main()
 
 def scrapeSites():
-  scraper_bangbros.main()
-  scraper_brazzers.main()
+  bangbros.scraper()
+  brazzers.scraper()
   scraper_genderx.main()
-  scraper_kink.main()
+  kink.scraper()
   scraper_mylf.main()
   scraper_vixen.main()
 

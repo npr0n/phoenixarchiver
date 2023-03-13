@@ -1,6 +1,7 @@
 #!/usr/bin/python3
 
 from variables import *
+from datetime import datetime
 from pymongo.mongo_client import MongoClient
 import pymongo.errors
 
@@ -32,4 +33,15 @@ def find_one_no_title(collection):
     return doc
   except:
     print("Did not find dataset without title")
+    return 1
+
+def add_dateymd(collection, dateformat: str):
+  try:
+    doc = collection.find_one({"dateymd": {"$exists": False}})
+    print(doc)
+    doc['dateymd'] = datetime.strptime(doc['datesite'], dateformat).strftime('%y.%m.%d')
+    print(doc['dateymd'])
+    upsert(collection = collection, doc = doc, key = 'url')
+  except:
+    print("Did not find dataset without dateymd")
     return 1
