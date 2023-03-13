@@ -9,9 +9,69 @@ from selenium.common.exceptions import NoSuchElementException
 from selenium.common.exceptions import TimeoutException
 from time import sleep
 
-sites = [
+scrapeSites = [
   "vixen"
 ]
+
+discoverySites = [
+{
+  "baseUrl": "https://www.blacked.com/videos",
+  "resultSearchPattern": "//a[@data-test-component= 'TitleLink']",
+  "nextPageSearchPattern": "//a[@data-test-component= 'PaginationNext']",
+  "method": "XPATH",
+  "collection": "vixen",
+  "channel": "blacked"
+},
+{
+  "baseUrl": "https://www.blackedraw.com/videos",
+  "resultSearchPattern": "//a[@data-test-component= 'TitleLink']",
+  "nextPageSearchPattern": "//a[@data-test-component= 'PaginationNext']",
+  "method": "XPATH",
+  "collection": "vixen",
+  "channel": "blackedraw"
+},
+{
+  "baseUrl": "https://www.deeper.com/videos",
+  "resultSearchPattern": "//a[@data-test-component= 'TitleLink']",
+  "nextPageSearchPattern": "//a[@data-test-component= 'PaginationNext']",
+  "method": "XPATH",
+  "collection": "vixen",
+  "channel": "deeper"
+},
+{
+  "baseUrl": "https://www.slayed.com/videos",
+  "resultSearchPattern": "//a[@data-test-component= 'TitleLink']",
+  "nextPageSearchPattern": "//a[@data-test-component= 'PaginationNext']",
+  "method": "XPATH",
+  "collection": "vixen",
+  "channel": "slayed"
+},
+{
+  "baseUrl": "https://www.tushy.com/videos",
+  "resultSearchPattern": "//a[@data-test-component= 'TitleLink']",
+  "nextPageSearchPattern": "//a[@data-test-component= 'PaginationNext']",
+  "method": "XPATH",
+  "collection": "vixen",
+  "channel": "tushy"
+},
+{
+  "baseUrl": "https://www.tushyraw.com/videos",
+  "resultSearchPattern": "//a[@data-test-component= 'TitleLink']",
+  "nextPageSearchPattern": "//a[@data-test-component= 'PaginationNext']",
+  "method": "XPATH",
+  "collection": "vixen",
+  "channel": "tushyraw"
+},
+{
+  "baseUrl": "https://www.vixen.com/videos",
+  "resultSearchPattern": "//a[@data-test-component= 'TitleLink']",
+  "nextPageSearchPattern": "//a[@data-test-component= 'PaginationNext']",
+  "method": "XPATH",
+  "collection": "vixen",
+  "channel": "vixen"
+}
+]
+
 
 def vixen_scraper(driver, doc, getmaxtries: int = 1, findmaxtries: int = 1, verbose: bool = False):
   # get page
@@ -144,8 +204,7 @@ def vixen_scraper(driver, doc, getmaxtries: int = 1, findmaxtries: int = 1, verb
 
   return doc
 
-
-def main(mongoUri = MONGODB_URI, mongoDB = MONGODB_DATABASE, sites = sites, useragent = SELENIUM_USERAGENT, command_executor = SELENIUM_URI, headless = SELENIUM_HEADLESS, driver_iwait: int = 10, verbose: bool = False):
+def scraper(mongoUri = MONGODB_URI, mongoDB = MONGODB_DATABASE, sites = scrapeSites, useragent = SELENIUM_USERAGENT, command_executor = SELENIUM_URI, headless = SELENIUM_HEADLESS, driver_iwait: int = 10, verbose: bool = False):
   # mongodb connection
   try:
     if verbose:
@@ -210,3 +269,30 @@ def main(mongoUri = MONGODB_URI, mongoDB = MONGODB_DATABASE, sites = sites, user
     sleep(30)
   
   driver.quit()
+
+def discovery(mongoUri = MONGODB_URI, mongoDB = MONGODB_DATABASE, sites = discoverySites, useragent = SELENIUM_USERAGENT, command_executor = SELENIUM_URI, headless = SELENIUM_HEADLESS, maxPage = DISCOVERY_MAXPAGES, driver_iwait: int = 30, initPage: int = 1, verbose: bool = False):
+  # mongodb connection
+  try:
+    db = dbase.init_db(mongoUri, mongoDB)
+  except:
+    print("error setting up db connection")
+    return 1
+  
+  # webdriver
+  try:
+    driver = wdriver.init_driver(command_executor = command_executor, useragent = useragent, driver_iwait = driver_iwait, headless = headless)
+  except:
+    print("error setting up webdriver")
+    return 1
+  
+  for site in sites:
+    try:
+      wdriver.discover_site(db = db, driver = driver, site = site, maxPage = maxPage, navsleep = 1, verbose = verbose)
+    except:
+      continue
+  
+  driver.quit()
+
+if __name__ == "__main__":
+  discovery()
+  scraper()
