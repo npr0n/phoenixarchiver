@@ -24,6 +24,11 @@ discoverySites = [
 }
 ]
 
+def cookie_warn_close(driver):
+  driver.get("https://www.mylf.com")
+  sleep(5)
+  driver.find_element(By.ID, "cookie-dismiss-button").click()
+
 def mylf_scraper(driver, doc, getmaxtries: int = 1, findmaxtries: int = 1, verbose: bool = False):
   # get page
   for attempt in range(getmaxtries):
