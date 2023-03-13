@@ -11,38 +11,19 @@ from urllib.parse import urlparse
 from time import sleep
 
 scrapeSites = [
-  "kink"
+  "wicked"
 ]
 
 discoverySites = [
 {
-  "baseUrl": "https://www.kink.com/shoots/latest",
-  "resultSearchPattern": "//a[@class= 'shoot-link']",
-  "nextPageSearchPattern": "//nav[@class= 'paginated-nav']/ul/li/a/span[text() = 'Next']/parent::a[1]",
-  "method": "XPATH",
-  "collection": "kink"
-},
-{
-  "baseUrl": "https://www.kink.com/shoots/featured",
-  "resultSearchPattern": "//a[@class= 'shoot-link']",
-  "nextPageSearchPattern": "//nav[@class= 'paginated-nav']/ul/li/a/span[text() = 'Next']/parent::a[1]",
-  "method": "XPATH",
-  "collection": "kink"
-},
-{
-  "baseUrl": "https://www.kink.com/shoots/partner",
-  "resultSearchPattern": "//a[@class= 'shoot-link']",
-  "nextPageSearchPattern": "//nav[@class= 'paginated-nav']/ul/li/a/span[text() = 'Next']/parent::a[1]",
-  "method": "XPATH",
-  "collection": "kink"
+  "baseUrl": "https://www.wicked.com/en/videos/page/1",
+  "resultSearchPattern": "//a[contains(@class, 'SceneThumb-SceneInfo-SceneTitle-Link')]",
+  "nextPageSearchPattern": "//a[contains(@class, 'next-Link')]",
+  "collection": "wicked",
+  "dateSearchPattern": "../../..//span[contains(@class, 'SceneDetail-DatePublished-Text')]",
+  "ratingSearchPattern": "../../..//span[contains(@class, 'SceneDetail-RatingPercentage-Text')]"
 }
 ]
-
-def cookie_warn_close(driver):
-  driver.get("https://www.kink.com")
-  #sleep(10)
-  driver.find_element(By.ID, "ccc-close").click()
-
 
 def page_scraper(driver, doc, getmaxtries: int = 1, findmaxtries: int = 1, verbose: bool = False):
   # get page
@@ -63,12 +44,24 @@ def page_scraper(driver, doc, getmaxtries: int = 1, findmaxtries: int = 1, verbo
     print("Website timed out several times. Skipping.")
     return 1
   
+  # id
+  try:
+    doc['id'] = urlparse(doc['url']).path.rpartition('/')[-1]
+  except:
+    pass
+
+  # id_2
+  try:
+    doc['id_2'] = urlparse(doc['url']).path.rsplit('/', 2)[-2]
+  except:
+    pass
+  
   # title
   for attempt in range(findmaxtries):
     try:
       if verbose:
         print("title", attempt)
-      doc['title'] = driver.find_element(By.XPATH, "//head/title").get_attribute("innerText")
+      doc['title'] = driver.find_element(By.XPATH, "//h1[contains(@class, 'ScenePlayerHeaderDesktop-PlayerTitle-Title')]").get_attribute("textContent")
       if "404" in doc['title']:
         return doc
     except NoSuchElementException:
@@ -76,23 +69,23 @@ def page_scraper(driver, doc, getmaxtries: int = 1, findmaxtries: int = 1, verbo
     else:
       break
 
-  # description
-  for attempt in range(findmaxtries):
-    try:
-      if verbose:
-        print("description", attempt)
-      doc['description'] = driver.find_element(By.XPATH, "//span[@class= 'description-text']").get_attribute("innerText")
-    except NoSuchElementException:
-      continue
-    else:
-      break
+  # # description
+  # for attempt in range(findmaxtries):
+  #   try:
+  #     if verbose:
+  #       print("description", attempt)
+  #     doc['description'] = driver.find_element(By.XPATH, "//span[@class= 'description-text']").get_attribute("innerText")
+  #   except NoSuchElementException:
+  #     continue
+  #   else:
+  #     break
 
   # date (site format)
   for attempt in range(findmaxtries):
     try:
       if verbose:
         print("date site format", attempt)
-      doc['datesite'] = driver.find_element(By.XPATH, "//span[@class= 'shoot-date']").get_attribute("innerText")
+      doc['datesite'] = driver.find_element(By.XPATH, "//span[contains(@class, 'ScenePlayerHeaderDesktop-Date-Text')]").get_attribute("innerText")
     except NoSuchElementException:
       continue
     else:
@@ -100,7 +93,7 @@ def page_scraper(driver, doc, getmaxtries: int = 1, findmaxtries: int = 1, verbo
       
   # date (yy.mm.dd)
   try:
-    doc['dateymd'] = datetime.strptime(doc['datesite'], '%B %d, %Y').strftime('%y.%m.%d')
+    doc['dateymd'] = datetime.strptime(doc['datesite'], '%Y-%m-%d').strftime('%y.%m.%d')
   except:
     pass
       
@@ -109,57 +102,52 @@ def page_scraper(driver, doc, getmaxtries: int = 1, findmaxtries: int = 1, verbo
     try:
       if verbose:
         print("posterurl", attempt)
-      doc['posterurl'] = driver.find_element(By.XPATH, "//video[@class= 'vjs-tech']").get_attribute("poster")
-    except NoSuchElementException:
-      try:
-        if verbose:
-          print("posterurl2", attempt)
-        doc['posterurl'] = driver.find_element(By.XPATH, "//div[@class= 'player']/img").get_attribute("src")
-      except:
-        continue
-    else:
-      break
-  
-  # channel
-  for attempt in range(findmaxtries):
-    try:
-      if verbose:
-        print("channel", attempt)
-      doc['channel'] = driver.find_element(By.XPATH, "//div[contains(@class, 'shoot-logo')]/a").get_attribute("href").rsplit('/', 1)[-1]
+      doc['posterurl'] = driver.find_element(By.XPATH, "/html/head/meta[@property= 'og:image']").get_attribute("content")
     except NoSuchElementException:
       continue
     else:
       break
+  
+  # # channel
+  # for attempt in range(findmaxtries):
+  #   try:
+  #     if verbose:
+  #       print("channel", attempt)
+  #     doc['channel'] = driver.find_element(By.XPATH, "//div[contains(@class, 'shoot-logo')]/a").get_attribute("href").rsplit('/', 1)[-1]
+  #   except NoSuchElementException:
+  #     continue
+  #   else:
+  #     break
   
   # director
   for attempt in range(findmaxtries):
     try:
       if verbose:
         print("director", attempt)
-      doc['director'] = driver.find_element(By.XPATH, "//span[@class= 'director-name']").get_attribute("innerText")
+      doc['director'] = driver.find_element(By.XPATH, "//span[contains(@class, 'ScenePlayerHeaderDesktop-Director-Text')]").get_attribute("innerText")
     except NoSuchElementException:
       continue
     else:
       break
   
-  # rating
-  for attempt in range(findmaxtries):
-    try:
-      if verbose:
-        print("rating", attempt)
-      doc['rating'] = driver.find_element(By.XPATH, "//div[contains(@class, 'shoot-info')]//span[contains(@class, 'thumb-up-percentage')]").get_attribute("innerText")
-    except NoSuchElementException:
-      continue
-    else:
-      break
+  # # rating
+  # for attempt in range(findmaxtries):
+  #   try:
+  #     if verbose:
+  #       print("rating", attempt)
+  #     doc['rating'] = driver.find_element(By.XPATH, "//div[contains(@class, 'shoot-info')]//span[contains(@class, 'thumb-up-percentage')]").get_attribute("innerText")
+  #   except NoSuchElementException:
+  #     continue
+  #   else:
+  #     break
   
   # actors
   for attempt in range(findmaxtries):
     try:
       if verbose:
         print("actors", attempt)
-      for actor in (driver.find_elements(By.XPATH, "//p[@class= 'starring']/span[contains(@class, 'names')]/a")):
-        actors.append(actor.get_attribute("innerText").split(',', 1)[0])
+      for actor in (driver.find_elements(By.XPATH, "//a[contains(@class, 'ActorThumb-Name-Link')]")):
+        actors.append(actor.get_attribute("textContent"))
       doc['actors'] = actors
     except NoSuchElementException:
       continue
@@ -171,10 +159,20 @@ def page_scraper(driver, doc, getmaxtries: int = 1, findmaxtries: int = 1, verbo
     try:
       if verbose:
         print("categories", attempt)
-      for category in (driver.find_elements(By.XPATH, "//a[@class= 'tag']")):
+      for category in (driver.find_elements(By.XPATH, "//a[contains(@class, 'ScenePlayerHeaderDesktop-Categories-Link')]")):
         categories.append(category.get_attribute("innerText"))
       doc['categories'] = categories
     except NoSuchElementException:
+      continue
+    else:
+      break
+  
+  # collection title
+  for attempt in range(findmaxtries):
+    try:
+      if (doc['title'].split()[-2].lower() == "scene" ):
+        doc['collectiontitle'] = doc['title'].rsplit(' - ', 1)[0]
+    except:
       continue
     else:
       break
@@ -200,11 +198,6 @@ def discovery(mongoUri = MONGODB_URI, mongoDB = MONGODB_DATABASE, sites = discov
     print("error setting up webdriver")
     return 1
   
-  # cookie closer
-  try:
-    cookie_warn_close(driver)
-  except:
-    print("cookie warning closer failed")
 
   for site in sites:
     try:
@@ -233,14 +226,7 @@ def scraper(mongoUri = MONGODB_URI, mongoDB = MONGODB_DATABASE, sites = scrapeSi
   except:
     print("error setting up webdriver")
     return 1
-  
-  # cookie closer
-  try:
-    if verbose:
-      print("closing cookie warning")
-    cookie_warn_close(driver)
-  except:
-    print("cookie warning closer failed")
+
 
   for site in sites:
     # set mongo collection

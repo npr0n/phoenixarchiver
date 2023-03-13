@@ -167,11 +167,6 @@ discoverySites = [
 }
 ]
 
-def cookie_warn_close(driver):
-  driver.get("https://www.kink.com")
-  #sleep(10)
-  driver.find_element(By.ID, "ccc-close").click()
-
 
 def page_scraper(driver, doc, getmaxtries: int = 1, findmaxtries: int = 1, verbose: bool = False):
   # get page
@@ -336,12 +331,7 @@ def discovery(mongoUri = MONGODB_URI, mongoDB = MONGODB_DATABASE, sites = discov
   except:
     print("error setting up webdriver")
     return 1
-  
-  # cookie closer
-  try:
-    cookie_warn_close(driver)
-  except:
-    print("cookie warning closer failed")
+
 
   for site in sites:
     try:
@@ -370,14 +360,6 @@ def scraper(mongoUri = MONGODB_URI, mongoDB = MONGODB_DATABASE, sites = scrapeSi
   except:
     print("error setting up webdriver")
     return 1
-  
-  # cookie closer
-  try:
-    if verbose:
-      print("closing cookie warning")
-    cookie_warn_close(driver)
-  except:
-    print("cookie warning closer failed")
 
   for site in sites:
     # set mongo collection
