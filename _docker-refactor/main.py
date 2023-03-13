@@ -1,31 +1,75 @@
 #!/usr/bin/python3
 
-import discovery_genderx
-import discovery_mylf
-import discovery_vixen
 
 import bangbros
 import brazzers
-import scraper_genderx
+import genderx
 import kink
-import scraper_mylf
-import scraper_vixen
+import mylf
+import vixen
 
 def discoverSites():
-  bangbros.discovery()
-  brazzers.discovery()
-  discovery_genderx.main()
-  kink.discovery()
-  discovery_mylf.main()
-  discovery_vixen.main()
+  try:
+    bangbros.discovery()
+  except:
+    print("failed bangbros discovery")
+  
+  try:
+    brazzers.discovery()
+  except:
+    print("failed brazzers discovery")
+  
+  try:
+    genderx.discovery()
+  except:
+    print("failed genderx discovery")
+  
+  try:
+    kink.discovery()
+  except:
+    print("failed kink discovery")
+  
+  try:
+    mylf.discovery()
+  except:
+    print("failed mylf discovery")
+  
+  try:
+    vixen.discovery()
+  except:
+    print("failed vixen discovery")
+
 
 def scrapeSites():
-  bangbros.scraper()
-  brazzers.scraper()
-  scraper_genderx.main()
-  kink.scraper()
-  scraper_mylf.main()
-  scraper_vixen.main()
+  try:
+    bangbros.scraper()
+  except:
+    print("failed bangbros scraper")
+  
+  try:
+    brazzers.scraper()
+  except:
+    print("failed brazzers scraper")
+  
+  try:
+    genderx.scraper()
+  except:
+    print("failed genderx scraper")
+  
+  try:
+    kink.scraper()
+  except:
+    print("failed kink scraper")
+  
+  try:
+    mylf.scraper()
+  except:
+    print("failed mylf scraper")
+  
+  try:
+    vixen.scraper()
+  except:
+    print("failed vixen scraper")
 
 
 if __name__ == "__main__":
