@@ -1,6 +1,6 @@
 #!/usr/bin/python3
 
-
+import adulttime
 import bangbros
 import brazzers
 import genderx
@@ -9,6 +9,11 @@ import mylf
 import vixen
 
 def discoverSites():
+  try:
+    adulttime.discovery()
+  except:
+    print("failed adulttime discovery")
+  
   try:
     bangbros.discovery()
   except:
@@ -41,6 +46,11 @@ def discoverSites():
 
 
 def scrapeSites(verbose: bool = False):
+  try:
+    adulttime.scraper(verbose=verbose)
+  except:
+    print("failed adulttime scraper")
+  
   try:
     bangbros.scraper(verbose=verbose)
   except:
