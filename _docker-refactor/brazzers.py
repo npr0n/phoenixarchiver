@@ -7,6 +7,7 @@ from datetime import datetime
 from selenium.webdriver.common.by import By
 from selenium.common.exceptions import NoSuchElementException
 from selenium.common.exceptions import TimeoutException
+from urllib.parse import urlparse
 from time import sleep
 
 scrapeSites = [
@@ -102,7 +103,7 @@ def discovery(mongoUri = MONGODB_URI, mongoDB = MONGODB_DATABASE, sites = discov
   
   driver.quit()
 
-def brazzers_scraper(driver, doc, getmaxtries: int = 1, findmaxtries: int = 1, verbose: bool = False):
+def page_scraper(driver, doc, getmaxtries: int = 1, findmaxtries: int = 1, verbose: bool = False):
   # get page
   for attempt in range(getmaxtries):
     try:
@@ -120,6 +121,18 @@ def brazzers_scraper(driver, doc, getmaxtries: int = 1, findmaxtries: int = 1, v
   else:
     print("Website timed out several times. Skipping.")
     return 1
+  
+  # id
+  try:
+    doc['id'] = urlparse(doc['url']).path.rpartition('/')[-1]
+  except:
+    pass
+
+  # id_2
+  try:
+    doc['id_2'] = urlparse(doc['url']).path.rsplit('/', 2)[-2]
+  except:
+    pass
   
   # title
   for attempt in range(findmaxtries):
@@ -271,7 +284,7 @@ def scraper(mongoUri = MONGODB_URI, mongoDB = MONGODB_DATABASE, sites = scrapeSi
       # scrape page and update doc
       try:
         if doc != None:
-          doc = brazzers_scraper(driver = driver, doc = doc, verbose = verbose)
+          doc = page_scraper(driver = driver, doc = doc, verbose = verbose)
         else:
           if verbose:
             print("finished page")
