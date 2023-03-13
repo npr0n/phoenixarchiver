@@ -14,15 +14,6 @@ sites = [
   "kink"
 ]
 
-def kink_is404(driver):
-  # 404
-  try:
-    if driver.find_element(By.CLASS_NAME, "four-oh-four"):
-      print("got 404 page")
-      return 404
-  except:
-    return 0
-
 def kink_scraper(driver, doc, getmaxtries: int = 1, findmaxtries: int = 1, verbose: bool = False):
   # get page
   for attempt in range(getmaxtries):

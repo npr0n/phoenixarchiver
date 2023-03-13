@@ -3,6 +3,7 @@
 from variables import *
 import wdriver
 import dbase
+from selenium.webdriver.common.by import By
 from time import sleep
 
 ### SITE CONFIG ###

@@ -33,3 +33,4 @@ def scrapeSites():
 
 if __name__ == "__main__":
   discoverSites()
+  scrapeSites()
