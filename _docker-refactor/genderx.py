@@ -115,7 +115,7 @@ def genderx_scraper(driver, doc, getmaxtries: int = 1, findmaxtries: int = 1, ve
     try:
       if verbose:
         print("date site format", attempt)
-      doc['datesite'] = driver.find_element(By.XPATH, "//span[contains(@class, 'ScenePlayerHeaderDesktop-Date-TExt']").get_attribute("innerText")
+      doc['datesite'] = driver.find_element(By.XPATH, "//span[contains(@class, 'ScenePlayerHeaderDesktop-Date-Text')]").get_attribute("innerText")
     except NoSuchElementException:
       continue
     else:

@@ -40,34 +40,34 @@ def discoverSites():
     print("failed vixen discovery")
 
 
-def scrapeSites():
+def scrapeSites(verbose: bool = False):
   try:
-    bangbros.scraper()
+    bangbros.scraper(verbose=verbose)
   except:
     print("failed bangbros scraper")
   
   try:
-    brazzers.scraper()
+    brazzers.scraper(verbose=verbose)
   except:
     print("failed brazzers scraper")
   
   try:
-    genderx.scraper()
+    genderx.scraper(verbose=verbose)
   except:
     print("failed genderx scraper")
   
   try:
-    kink.scraper()
+    kink.scraper(verbose=verbose)
   except:
     print("failed kink scraper")
   
   try:
-    mylf.scraper()
+    mylf.scraper(verbose=verbose)
   except:
     print("failed mylf scraper")
   
   try:
-    vixen.scraper()
+    vixen.scraper(verbose=verbose)
   except:
     print("failed vixen scraper")
 
