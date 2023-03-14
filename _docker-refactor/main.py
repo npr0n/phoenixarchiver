@@ -7,6 +7,7 @@ import genderx
 import kink
 import mylf
 import vixen
+import wicked
 
 def discoverSites():
   try:
@@ -43,6 +44,11 @@ def discoverSites():
     vixen.discovery()
   except:
     print("failed vixen discovery")
+  
+  try:
+    wicked.discovery()
+  except:
+    print("failed wicked discovery")
 
 
 def scrapeSites(verbose: bool = False):
@@ -80,6 +86,11 @@ def scrapeSites(verbose: bool = False):
     vixen.scraper(verbose=verbose)
   except:
     print("failed vixen scraper")
+  
+  try:
+    wicked.scraper(verbose=verbose)
+  except:
+    print("failed wicked scraper")
 
 
 if __name__ == "__main__":
