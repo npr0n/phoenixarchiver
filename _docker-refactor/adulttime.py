@@ -11,10 +11,26 @@ from urllib.parse import urlparse
 from time import sleep
 
 scrapeSites = [
-  "adulttime"
+  "adulttime",
+  "evilangel",
+  "evilangel_collections"
 ]
 
 discoverySites = [
+{
+  "baseUrl": "https://www.evilangel.com/en/movies",
+  "resultSearchPattern": "//a[contains(@class, 'DvdThumb-DvdTitle-Link')]",
+  "nextPageSearchPattern": "//a[contains(@class, 'next-Link')]",
+  "collection": "evilangel_collections"
+},
+{
+  "baseUrl": "https://www.evilangel.com/en/videos",
+  "resultSearchPattern": "//a[contains(@class, 'SceneThumb-SceneInfo-SceneTitle-Link')]",
+  "nextPageSearchPattern": "//a[contains(@class, 'next-Link')]",
+  "dateSearchPattern": "../../..//span[contains(@class, 'SceneDetail-DatePublished-Text')]",
+  "ratingSearchPattern": "../../..//span[contains(@class, 'SceneDetail-RatingPercentage-Text')]",
+  "collection": "evilangel"
+},
 {
   "baseUrl": "https://www.devilsfilm.com/en/videos/sort/latest/page/1",
   "resultSearchPattern": "//a[contains(@class, 'SceneThumb-SceneInfo-SceneTitle-Link')]",
