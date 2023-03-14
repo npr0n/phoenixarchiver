@@ -45,7 +45,7 @@ def parse_element(elem, site, verbose: bool = False):
       result['channel'] = site['channel']
     else:
       if site['channelSearchPattern']:
-        result['channel'] = elem.find_element(By.XPATH, site['channelSearchPattern']).get_attribute(site['ratingSearchAttribute']).lower().replace(' ','').replace(',','').replace("'",'').replace('!','').replace('?','')
+        result['channel'] = elem.find_element(By.XPATH, site['channelSearchPattern']).get_attribute(site['channelSearchAttribute']).lower().replace(' ','').replace(',','').replace("'",'').replace('!','').replace('?','')
     if verbose:
       print("channel:", result['channel'])
   except:
