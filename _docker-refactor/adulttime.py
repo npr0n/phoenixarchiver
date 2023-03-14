@@ -180,6 +180,26 @@ discoverySites = [
   "channelSearchPattern": "../../..//a[contains(@class, 'SceneDetail-ChannelName-Link')]",
   "dateSearchPattern": "../../..//span[contains(@class, 'SceneDetail-DatePublished-Text')]",
   "ratingSearchPattern": "../../..//span[contains(@class, 'SceneDetail-RatingPercentage-Text')]"
+},
+{
+  "baseUrl": "https://www.girlfriendsfilms.com/en/videos/page/1",
+  "resultSearchPattern": "//a[contains(@class, 'SceneThumb-SceneInfo-SceneTitle-Link')]",
+  "nextPageSearchPattern": "//a[contains(@class, 'next-Link')]",
+  "method": "XPATH",
+  "collection": "adulttime",
+  "channel": "girlfriendsfilms",
+  "dateSearchPattern": "../../..//span[contains(@class, 'SceneDetail-DatePublished-Text')]",
+  "ratingSearchPattern": "../../..//span[contains(@class, 'SceneDetail-RatingPercentage-Text')]"
+},
+{
+  "baseUrl": "https://www.tabooheat.com/en/videos/page/1",
+  "resultSearchPattern": "//a[contains(@class, 'SceneThumb-SceneInfo-SceneTitle-Link')]",
+  "nextPageSearchPattern": "//a[contains(@class, 'next-Link')]",
+  "method": "XPATH",
+  "collection": "adulttime",
+  "channel": "tabooheat",
+  "dateSearchPattern": "../../..//span[contains(@class, 'SceneDetail-DatePublished-Text')]",
+  "ratingSearchPattern": "../../..//span[contains(@class, 'SceneDetail-RatingPercentage-Text')]"
 }
 ]
 
