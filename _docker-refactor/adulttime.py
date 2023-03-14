@@ -28,7 +28,9 @@ discoverySites = [
   "resultSearchPattern": "//a[contains(@class, 'SceneThumb-SceneInfo-SceneTitle-Link')]",
   "nextPageSearchPattern": "//a[contains(@class, 'next-Link')]",
   "dateSearchPattern": "../../..//span[contains(@class, 'SceneDetail-DatePublished-Text')]",
+  "dateSearchAttribute": "textContent",
   "ratingSearchPattern": "../../..//span[contains(@class, 'SceneDetail-RatingPercentage-Text')]",
+  "ratingSearchAttribute": "textContent",
   "collection": "evilangel"
 },
 {
@@ -38,8 +40,11 @@ discoverySites = [
   "method": "XPATH",
   "collection": "adulttime",
   "channelSearchPattern": "../../..//a[contains(@class, 'SceneDetail-ChannelName-Link')]",
+  "channelSearchAttribute": "textContent",
   "dateSearchPattern": "../../..//span[contains(@class, 'SceneDetail-DatePublished-Text')]",
-  "ratingSearchPattern": "../../..//span[contains(@class, 'SceneDetail-RatingPercentage-Text')]"
+  "dateSearchAttribute": "textContent",
+  "ratingSearchPattern": "../../..//span[contains(@class, 'SceneDetail-RatingPercentage-Text')]",
+  "ratingSearchAttribute": "textContent",
 },
 {
   "baseUrl": "https://www.21sextury.com/en/videos/sort/latest/page/1",
@@ -48,8 +53,11 @@ discoverySites = [
   "method": "XPATH",
   "collection": "adulttime",
   "channelSearchPattern": "../../..//a[contains(@class, 'SceneDetail-ChannelName-Link')]",
+  "channelSearchAttribute": "textContent",
   "dateSearchPattern": "../../..//span[contains(@class, 'SceneDetail-DatePublished-Text')]",
-  "ratingSearchPattern": "../../..//span[contains(@class, 'SceneDetail-RatingPercentage-Text')]"
+  "dateSearchAttribute": "textContent",
+  "ratingSearchPattern": "../../..//span[contains(@class, 'SceneDetail-RatingPercentage-Text')]",
+  "ratingSearchAttribute": "textContent"
 },
 {
   "baseUrl": "https://www.21naturals.com/en/videos/sort/latest/page/1",
@@ -58,8 +66,11 @@ discoverySites = [
   "method": "XPATH",
   "collection": "adulttime",
   "channelSearchPattern": "../../..//a[contains(@class, 'SceneDetail-ChannelName-Link')]",
+  "channelSearchAttribute": "textContent",
   "dateSearchPattern": "../../..//span[contains(@class, 'SceneDetail-DatePublished-Text')]",
-  "ratingSearchPattern": "../../..//span[contains(@class, 'SceneDetail-RatingPercentage-Text')]"
+  "dateSearchAttribute": "textContent",
+  "ratingSearchPattern": "../../..//span[contains(@class, 'SceneDetail-RatingPercentage-Text')]",
+  "ratingSearchAttribute": "textContent"
 },
 {
   "baseUrl": "https://www.21sextreme.com/en/videos/sort/latest/page/1",
@@ -68,8 +79,11 @@ discoverySites = [
   "method": "XPATH",
   "collection": "adulttime",
   "channelSearchPattern": "../../..//a[contains(@class, 'SceneDetail-ChannelName-Link')]",
+  "channelSearchAttribute": "textContent",
   "dateSearchPattern": "../../..//span[contains(@class, 'SceneDetail-DatePublished-Text')]",
-  "ratingSearchPattern": "../../..//span[contains(@class, 'SceneDetail-RatingPercentage-Text')]"
+  "dateSearchAttribute": "textContent",
+  "ratingSearchPattern": "../../..//span[contains(@class, 'SceneDetail-RatingPercentage-Text')]",
+  "ratingSearchAttribute": "textContent"
 },
 {
   "baseUrl": "https://www.transfixed.com/en/videos/page/1",
@@ -78,8 +92,11 @@ discoverySites = [
   "method": "XPATH",
   "collection": "adulttime",
   "channelSearchPattern": "../../..//a[contains(@class, 'SceneDetail-ChannelName-Link')]",
+  "channelSearchAttribute": "textContent",
   "dateSearchPattern": "../../..//span[contains(@class, 'SceneDetail-DatePublished-Text')]",
-  "ratingSearchPattern": "../../..//span[contains(@class, 'SceneDetail-RatingPercentage-Text')]"
+  "dateSearchAttribute": "textContent",
+  "ratingSearchPattern": "../../..//span[contains(@class, 'SceneDetail-RatingPercentage-Text')]",
+  "ratingSearchAttribute": "textContent"
 },
 {
   "baseUrl": "https://www.agentredgirl.com/en/videos/page/1",
@@ -88,8 +105,11 @@ discoverySites = [
   "method": "XPATH",
   "collection": "adulttime",
   "channelSearchPattern": "../../..//a[contains(@class, 'SceneDetail-ChannelName-Link')]",
+  "channelSearchAttribute": "textContent",
   "dateSearchPattern": "../../..//span[contains(@class, 'SceneDetail-DatePublished-Text')]",
-  "ratingSearchPattern": "../../..//span[contains(@class, 'SceneDetail-RatingPercentage-Text')]"
+  "dateSearchAttribute": "textContent",
+  "ratingSearchPattern": "../../..//span[contains(@class, 'SceneDetail-RatingPercentage-Text')]",
+  "ratingSearchAttribute": "textContent"
 },
 {
   "baseUrl": "https://www.girlsway.com/en/videos/page/1",
@@ -98,8 +118,11 @@ discoverySites = [
   "method": "XPATH",
   "collection": "adulttime",
   "channelSearchPattern": "../../..//a[contains(@class, 'SceneDetail-ChannelName-Link')]",
+  "channelSearchAttribute": "textContent",
   "dateSearchPattern": "../../..//span[contains(@class, 'SceneDetail-DatePublished-Text')]",
-  "ratingSearchPattern": "../../..//span[contains(@class, 'SceneDetail-RatingPercentage-Text')]"
+  "dateSearchAttribute": "textContent",
+  "ratingSearchPattern": "../../..//span[contains(@class, 'SceneDetail-RatingPercentage-Text')]",
+  "ratingSearchAttribute": "textContent"
 },
 {
   "baseUrl": "https://www.fantasymassage.com/en/videos/page/1",
@@ -108,8 +131,11 @@ discoverySites = [
   "method": "XPATH",
   "collection": "adulttime",
   "channelSearchPattern": "../../..//a[contains(@class, 'SceneDetail-ChannelName-Link')]",
+  "channelSearchAttribute": "textContent",
   "dateSearchPattern": "../../..//span[contains(@class, 'SceneDetail-DatePublished-Text')]",
-  "ratingSearchPattern": "../../..//span[contains(@class, 'SceneDetail-RatingPercentage-Text')]"
+  "dateSearchAttribute": "textContent",
+  "ratingSearchPattern": "../../..//span[contains(@class, 'SceneDetail-RatingPercentage-Text')]",
+  "ratingSearchAttribute": "textContent"
 },
 {
   "baseUrl": "https://www.joymii.com/en/videos/page/1",
@@ -118,8 +144,11 @@ discoverySites = [
   "method": "XPATH",
   "collection": "adulttime",
   "channelSearchPattern": "../../..//a[contains(@class, 'SceneDetail-ChannelName-Link')]",
+  "channelSearchAttribute": "textContent",
   "dateSearchPattern": "../../..//span[contains(@class, 'SceneDetail-DatePublished-Text')]",
-  "ratingSearchPattern": "../../..//span[contains(@class, 'SceneDetail-RatingPercentage-Text')]"
+  "dateSearchAttribute": "textContent",
+  "ratingSearchPattern": "../../..//span[contains(@class, 'SceneDetail-RatingPercentage-Text')]",
+  "ratingSearchAttribute": "textContent"
 },
 {
   "baseUrl": "https://www.moderndaysins.com/en/videos/page/1",
@@ -128,8 +157,11 @@ discoverySites = [
   "method": "XPATH",
   "collection": "adulttime",
   "channelSearchPattern": "../../..//a[contains(@class, 'SceneDetail-ChannelName-Link')]",
+  "channelSearchAttribute": "textContent",
   "dateSearchPattern": "../../..//span[contains(@class, 'SceneDetail-DatePublished-Text')]",
-  "ratingSearchPattern": "../../..//span[contains(@class, 'SceneDetail-RatingPercentage-Text')]"
+  "dateSearchAttribute": "textContent",
+  "ratingSearchPattern": "../../..//span[contains(@class, 'SceneDetail-RatingPercentage-Text')]",
+  "ratingSearchAttribute": "textContent"
 },
 {
   "baseUrl": "https://www.fantasymassage.com/en/videos/page/1",
@@ -138,8 +170,11 @@ discoverySites = [
   "method": "XPATH",
   "collection": "adulttime",
   "channelSearchPattern": "../../..//a[contains(@class, 'SceneDetail-ChannelName-Link')]",
+  "channelSearchAttribute": "textContent",
   "dateSearchPattern": "../../..//span[contains(@class, 'SceneDetail-DatePublished-Text')]",
-  "ratingSearchPattern": "../../..//span[contains(@class, 'SceneDetail-RatingPercentage-Text')]"
+  "dateSearchAttribute": "textContent",
+  "ratingSearchPattern": "../../..//span[contains(@class, 'SceneDetail-RatingPercentage-Text')]",
+  "ratingSearchAttribute": "textContent"
 },
 {
   "baseUrl": "https://www.disruptivefilms.com/en/videos/page/1",
@@ -149,7 +184,9 @@ discoverySites = [
   "collection": "adulttime",
   "channel": "disruptivefilms",
   "dateSearchPattern": "../../..//span[contains(@class, 'SceneDetail-DatePublished-Text')]",
-  "ratingSearchPattern": "../../..//span[contains(@class, 'SceneDetail-RatingPercentage-Text')]"
+  "dateSearchAttribute": "textContent",
+  "ratingSearchPattern": "../../..//span[contains(@class, 'SceneDetail-RatingPercentage-Text')]",
+  "ratingSearchAttribute": "textContent"
 },
 {
   "baseUrl": "https://www.modeltime.com/en/videos/page/1",
@@ -158,8 +195,11 @@ discoverySites = [
   "method": "XPATH",
   "collection": "adulttime",
   "channelSearchPattern": "../../..//a[contains(@class, 'SceneDetail-ChannelName-Link')]",
+  "channelSearchAttribute": "textContent",
   "dateSearchPattern": "../../..//span[contains(@class, 'SceneDetail-DatePublished-Text')]",
-  "ratingSearchPattern": "../../..//span[contains(@class, 'SceneDetail-RatingPercentage-Text')]"
+  "dateSearchAttribute": "textContent",
+  "ratingSearchPattern": "../../..//span[contains(@class, 'SceneDetail-RatingPercentage-Text')]",
+  "ratingSearchAttribute": "textContent"
 },
 {
   "baseUrl": "https://www.isthisreal.com/en/videos/page/1",
@@ -168,8 +208,11 @@ discoverySites = [
   "method": "XPATH",
   "collection": "adulttime",
   "channelSearchPattern": "../../..//a[contains(@class, 'SceneDetail-ChannelName-Link')]",
+  "channelSearchAttribute": "textContent",
   "dateSearchPattern": "../../..//span[contains(@class, 'SceneDetail-DatePublished-Text')]",
-  "ratingSearchPattern": "../../..//span[contains(@class, 'SceneDetail-RatingPercentage-Text')]"
+  "dateSearchAttribute": "textContent",
+  "ratingSearchPattern": "../../..//span[contains(@class, 'SceneDetail-RatingPercentage-Text')]",
+  "ratingSearchAttribute": "textContent"
 },
 {
   "baseUrl": "https://www.zerotolerancefilms.com/en/videos/page/1",
@@ -178,8 +221,11 @@ discoverySites = [
   "method": "XPATH",
   "collection": "adulttime",
   "channelSearchPattern": "../../..//a[contains(@class, 'SceneDetail-ChannelName-Link')]",
+  "channelSearchAttribute": "textContent",
   "dateSearchPattern": "../../..//span[contains(@class, 'SceneDetail-DatePublished-Text')]",
-  "ratingSearchPattern": "../../..//span[contains(@class, 'SceneDetail-RatingPercentage-Text')]"
+  "dateSearchAttribute": "textContent",
+  "ratingSearchPattern": "../../..//span[contains(@class, 'SceneDetail-RatingPercentage-Text')]",
+  "ratingSearchAttribute": "textContent"
 },
 {
   "baseUrl": "https://www.girlfriendsfilms.com/en/videos/page/1",
@@ -189,7 +235,9 @@ discoverySites = [
   "collection": "adulttime",
   "channel": "girlfriendsfilms",
   "dateSearchPattern": "../../..//span[contains(@class, 'SceneDetail-DatePublished-Text')]",
-  "ratingSearchPattern": "../../..//span[contains(@class, 'SceneDetail-RatingPercentage-Text')]"
+  "dateSearchAttribute": "textContent",
+  "ratingSearchPattern": "../../..//span[contains(@class, 'SceneDetail-RatingPercentage-Text')]",
+  "ratingSearchAttribute": "textContent"
 },
 {
   "baseUrl": "https://www.tabooheat.com/en/videos/page/1",
@@ -199,7 +247,9 @@ discoverySites = [
   "collection": "adulttime",
   "channel": "tabooheat",
   "dateSearchPattern": "../../..//span[contains(@class, 'SceneDetail-DatePublished-Text')]",
-  "ratingSearchPattern": "../../..//span[contains(@class, 'SceneDetail-RatingPercentage-Text')]"
+  "dateSearchAttribute": "textContent",
+  "ratingSearchPattern": "../../..//span[contains(@class, 'SceneDetail-RatingPercentage-Text')]",
+  "ratingSearchAttribute": "textContent"
 }
 ]
 
