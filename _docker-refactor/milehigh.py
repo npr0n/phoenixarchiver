@@ -70,7 +70,7 @@ discoverySites = [
 def confirm_age(driver):
   # sleep(3)
   driver.find_element(By.XPATH, "//button/span[contains(text(), 'Enter')]").click()
-  sleep(5)
+  # sleep(5)
 
 
 def page_scraper(driver, doc, getmaxtries: int = 1, findmaxtries: int = 1, verbose: bool = False):
