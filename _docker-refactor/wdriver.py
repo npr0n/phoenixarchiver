@@ -162,7 +162,8 @@ def loop_through_sites(db, driver, sites: list, maxPage: int = 1, initPage: int 
 
 def discover_site(db, driver, site: dict, maxPage: int = 1, initPage: int = 1, navsleep: int = 0, verbose: bool = False, scrollOffset: int = 0, prenavsleep: int = 0):
   
-  print("working on site:", site['baseUrl'])
+  if verbose:
+    print("working on site:", site['baseUrl'])
   try:
     driver.get(site['baseUrl'])
   except:
