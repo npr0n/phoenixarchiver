@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 
 from variables import *
-from dbase import *
+import dbase
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.action_chains import ActionChains
@@ -136,7 +136,7 @@ def parse_search_pages(driver, site: dict, collection, maxPage: int = 1, pageCou
         result = parse_element(elem = elem, site = site, verbose = verbose)
         if verbose:
           print("result:", result)
-        upsert(collection = collection, doc = result, key = 'url')
+        dbase.upsert(collection = collection, doc = result, key = 'url')
         if verbose:
           print("updated db")
     
