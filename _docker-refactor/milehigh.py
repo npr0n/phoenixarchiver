@@ -206,7 +206,7 @@ def page_scraper(driver, doc, getmaxtries: int = 1, findmaxtries: int = 1, verbo
     try:
       if verbose:
         print("actors", attempt)
-      for actor in driver.find_elements(wdriver.By.XPATH, f"//h2[contains(text(), \'{title}\')]/..//a[contains(@href, '/model/')]"):
+      for actor in driver.find_elements(wdriver.By.XPATH, f"//*[self::h1 or self::h2][contains(text(), \'{title}\')]/..//a[contains(@href, '/model/')]"):
         actors.append(actor.get_attribute("textContent"))
       doc['actors'] = actors
       if verbose:
