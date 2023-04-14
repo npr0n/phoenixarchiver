@@ -206,7 +206,7 @@ def page_scraper(driver, doc, getmaxtries: int = 1, findmaxtries: int = 1, verbo
     try:
       if verbose:
         print("actors", attempt)
-      for actor in driver.find_elements(wdriver.By.XPATH, f"//*[self::h1 or self::h2][contains(text(), \'{title}\')]/..//a[contains(@href, '/model/')]"):
+      for actor in driver.find_elements(By.XPATH, f"//*[self::h1 or self::h2][contains(text(), \'{title}\')]/..//a[contains(@href, '/model/')]"):
         actors.append(actor.get_attribute("textContent"))
       doc['actors'] = actors
       if verbose:
@@ -223,7 +223,7 @@ def page_scraper(driver, doc, getmaxtries: int = 1, findmaxtries: int = 1, verbo
     try:
       if verbose:
         print("categories", attempt)
-      for category in driver.find_elements(wdriver.By.XPATH, "//div[contains(text(), 'Categories')]/../a[contains(@href, '/scenes?tags=')]"):
+      for category in driver.find_elements(By.XPATH, "//div[contains(text(), 'Categories')]/../a[contains(@href, '/scenes?tags=')]"):
         categories.append(category.get_attribute("textContent"))
       doc['categories'] = categories
       if verbose:
