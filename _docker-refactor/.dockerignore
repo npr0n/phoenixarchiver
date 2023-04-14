@@ -1,0 +1,9 @@
+mongo.sh
+testfile.*
+__pycache__
+*.env
+Dockerfile
+compose.yaml
+template.py
+.gitignore
+.env
