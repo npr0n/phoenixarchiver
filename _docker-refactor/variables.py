@@ -11,3 +11,5 @@ MONGODB_URI = os.getenv('MONGODB_URI', "mongodb://phoenixinserter:phoenix@localh
 MONGODB_DATABASE = os.getenv('MONGODB_DATABASE', "phoenixarchive")
 
 DISCOVERY_MAXPAGES = int(os.getenv('DISCOVERY_MAXPAGES', "10"))
+
+VERBOSE = os.getenv('VERBOSE', 'True')

@@ -8,45 +8,46 @@ import kink
 import mylf
 import vixen
 import wicked
+import variables
 
-def discoverSites():
+def discoverSites(verbose: bool = False):
   try:
-    adulttime.discovery()
+    adulttime.discovery(verbose=verbose)
   except:
     print("failed adulttime discovery")
   
   try:
-    bangbros.discovery()
+    bangbros.discovery(verbose=verbose)
   except:
     print("failed bangbros discovery")
   
   try:
-    brazzers.discovery()
+    brazzers.discovery(verbose=verbose)
   except:
     print("failed brazzers discovery")
   
   try:
-    genderx.discovery()
+    genderx.discovery(verbose=verbose)
   except:
     print("failed genderx discovery")
   
   try:
-    kink.discovery()
+    kink.discovery(verbose=verbose)
   except:
     print("failed kink discovery")
   
   try:
-    mylf.discovery()
+    mylf.discovery(verbose=verbose)
   except:
     print("failed mylf discovery")
   
   try:
-    vixen.discovery()
+    vixen.discovery(verbose=verbose)
   except:
     print("failed vixen discovery")
   
   try:
-    wicked.discovery()
+    wicked.discovery(verbose=verbose)
   except:
     print("failed wicked discovery")
 
@@ -94,5 +95,5 @@ def scrapeSites(verbose: bool = False):
 
 
 if __name__ == "__main__":
-  discoverSites()
-  scrapeSites()
+  discoverSites(verbose=variables.VERBOSE)
+  scrapeSites(verbose=variables.VERBOSE)
