@@ -11,6 +11,11 @@ import wicked
 import variables
 
 def discoverSites(verbose: bool = False):
+  if verbose:
+    print("#######################")
+    print("# BEGINNING DISCOVERY #")
+    print("#######################")
+  
   try:
     adulttime.discovery(verbose=verbose)
   except:
@@ -50,9 +55,20 @@ def discoverSites(verbose: bool = False):
     wicked.discovery(verbose=verbose)
   except:
     print("failed wicked discovery")
+  
+  if verbose:
+    print("######################")
+    print("# FINISHED DISCOVERY #")
+    print("######################")
+  
 
 
 def scrapeSites(verbose: bool = False):
+  if verbose:
+    print("######################")
+    print("# BEGINNING SCRAPERS #")
+    print("######################")
+  
   try:
     adulttime.scraper(verbose=verbose)
   except:
@@ -92,6 +108,12 @@ def scrapeSites(verbose: bool = False):
     wicked.scraper(verbose=verbose)
   except:
     print("failed wicked scraper")
+  
+  if verbose:
+    print("#####################")
+    print("# FINISHED SCRAPERS #")
+    print("#####################")
+  
 
 
 if __name__ == "__main__":
