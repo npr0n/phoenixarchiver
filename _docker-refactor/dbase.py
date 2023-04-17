@@ -35,6 +35,14 @@ def find_one_no_title(collection):
     print("Did not find dataset without title")
     return 1
 
+def find_one_no_mega(collection):
+  try:
+    doc = collection.find_one({"title": {"$exists": True}, "posterurl": {"$exists": True}, "postermegalink": {"$exists": False}})
+    return doc
+  except:
+    "Did not find dataset matching: title: yes, posterurl: yes, postermegalink: no"
+    return 1
+
 def add_dateymd(collection, dateformat: str):
   try:
     doc = collection.find_one({"dateymd": {"$exists": False}})

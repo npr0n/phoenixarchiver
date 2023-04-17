@@ -9,6 +9,7 @@ from selenium.common.exceptions import NoSuchElementException
 from selenium.common.exceptions import TimeoutException
 from urllib.parse import urlparse
 from time import sleep
+import poster
 
 scrapeSites = [
   "kink"
@@ -43,6 +44,14 @@ def cookie_warn_close(driver):
   #sleep(10)
   driver.find_element(By.ID, "ccc-close").click()
 
+def poster_downloader(mongoUri = MONGODB_URI, mongoDB = MONGODB_DATABASE, sites = scrapeSites):
+  poster.mega_logout()
+  poster.mega_login(MEGA_KINK_U, MEGA_KINK_P)
+  for site in sites:
+    db = dbase.init_db(uri=mongoUri, database=mongoDB)
+    coll = db[site]
+    poster.collection_poster_downloader(collection=coll)
+  poster.mega_logout()
 
 def page_scraper(driver, doc, getmaxtries: int = 1, findmaxtries: int = 1, verbose: bool = False):
   # get page
