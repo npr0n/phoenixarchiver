@@ -13,3 +13,6 @@ MONGODB_DATABASE = os.getenv('MONGODB_DATABASE', "phoenixarchive")
 DISCOVERY_MAXPAGES = int(os.getenv('DISCOVERY_MAXPAGES', "10"))
 
 VERBOSE = os.getenv('VERBOSE', 'True').lower() in ('true', 't', '1', '0')
+
+MEGA_USERNAME = os.getenv('MEGA_USERNAME', False)
+MEGA_PASSWORD = os.getenv('MEGA_PASSWORD', False)
