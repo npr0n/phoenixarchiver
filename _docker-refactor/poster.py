@@ -21,7 +21,7 @@ def mega_logout():
   if VERBOSE:
     subprocess.run("mega-logout", stdout=subprocess.DEVNULL)
   else:
-    subprocess.run("mega-logout", stdout=subprocess.DEVNULL, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+    subprocess.run("mega-logout", stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
 
 def mega_upload_file(source: os.PathLike, target: str):
   if VERBOSE:
@@ -102,11 +102,13 @@ def collection_poster_downloader(collection):
     try:
       doc = dbase.find_one_no_mega(collection)
       if VERBOSE:
-        print(f"found doc: {doc}")
+        if doc == None:
+          print("did not find doc without mega link")
+          break
+        else:
+          print(f"found doc: {doc}")
+      doc = poster_download_from_doc(doc)
+      dbase.upsert(collection=collection, doc=doc, key="_id")
     except:
-      if VERBOSE:
-        print("did not find doc without mega link")
-      False
-    
-    doc = poster_download_from_doc(doc)
-    dbase.upsert(collection=collection, doc=doc, key="_id")
+      break
+   
