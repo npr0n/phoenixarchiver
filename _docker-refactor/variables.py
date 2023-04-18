@@ -23,6 +23,9 @@ MEGA_BANG_P = os.getenv('MEGA_BANG_P', False)
 MEGA_BRAZ_U = os.getenv('MEGA_BRAZ_U', False)
 MEGA_BRAZ_P = os.getenv('MEGA_BRAZ_P', False)
 
+MEGA_EVIL_U = os.getenv('MEGA_EVIL_U', False)
+MEGA_EVIL_P = os.getenv('MEGA_EVIL_P', False)
+
 MEGA_GENX_U = os.getenv('MEGA_GENX_U', False)
 MEGA_GENX_P = os.getenv('MEGA_GENX_P', False)
 
