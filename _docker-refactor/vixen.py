@@ -74,14 +74,14 @@ discoverySites = [
 ]
 
 
-def page_scraper(driver, doc, getmaxtries: int = 1, findmaxtries: int = 1, verbose: bool = False):
+def page_scraper(driver, doc, getmaxtries: int = 1, findmaxtries: int = 1):
   # get page
   for attempt in range(getmaxtries):
     try:
       actors = []
       categories = []
       driver.get(doc['url'])
-      if verbose:
+      if VERBOSE:
         print(doc['url'])
     except TimeoutException:
       print("page timed out")
@@ -108,7 +108,7 @@ def page_scraper(driver, doc, getmaxtries: int = 1, findmaxtries: int = 1, verbo
   # title
   for attempt in range(findmaxtries):
     try:
-      if verbose:
+      if VERBOSE:
         print("title", attempt)
       doc['title'] = driver.find_element(By.XPATH, "//head/title").get_attribute("innerText")
       if "Page not found" in doc['title']:
@@ -121,7 +121,7 @@ def page_scraper(driver, doc, getmaxtries: int = 1, findmaxtries: int = 1, verbo
   # description
   for attempt in range(findmaxtries):
     try:
-      if verbose:
+      if VERBOSE:
         print("description", attempt)
       doc['description'] = driver.find_element(By.XPATH, "//div[@data-test-component= 'VideoDescription']/p").get_attribute("innerText")
     except NoSuchElementException:
@@ -132,7 +132,7 @@ def page_scraper(driver, doc, getmaxtries: int = 1, findmaxtries: int = 1, verbo
   # date (site format)
   for attempt in range(findmaxtries):
     try:
-      if verbose:
+      if VERBOSE:
         print("date site format", attempt)
       doc['datesite'] = driver.find_element(By.XPATH, "//span[@data-test-component= 'ReleaseDateFormatted']").get_attribute("textContent")
     except NoSuchElementException:
@@ -150,12 +150,12 @@ def page_scraper(driver, doc, getmaxtries: int = 1, findmaxtries: int = 1, verbo
   # # poster url
   # for attempt in range(findmaxtries):
   #   try:
-  #     if verbose:
+  #     if VERBOSE:
   #       print("posterurl", attempt)
   #     doc['posterurl'] = driver.find_element(By.XPATH, "//video[@class= 'vjs-tech']").get_attribute("poster")
   #   except NoSuchElementException:
   #     try:
-  #       if verbose:
+  #       if VERBOSE:
   #         print("posterurl2", attempt)
   #       doc['posterurl'] = driver.find_element(By.XPATH, "//div[@class= 'player']/img").get_attribute("src")
   #     except:
@@ -167,7 +167,7 @@ def page_scraper(driver, doc, getmaxtries: int = 1, findmaxtries: int = 1, verbo
   # director
   for attempt in range(findmaxtries):
     try:
-      if verbose:
+      if VERBOSE:
         print("director", attempt)
       doc['director'] = driver.find_element(By.XPATH, "//span[@data-test-component= 'DirectorText']").get_attribute("innerText")
     except NoSuchElementException:
@@ -178,7 +178,7 @@ def page_scraper(driver, doc, getmaxtries: int = 1, findmaxtries: int = 1, verbo
   # rating
   for attempt in range(findmaxtries):
     try:
-      if verbose:
+      if VERBOSE:
         print("rating", attempt)
       doc['rating'] = driver.find_element(By.XPATH, "//span[@data-test-component= 'RatingNumber']").get_attribute("innerText")
     except NoSuchElementException:
@@ -189,7 +189,7 @@ def page_scraper(driver, doc, getmaxtries: int = 1, findmaxtries: int = 1, verbo
   # actors
   for attempt in range(findmaxtries):
     try:
-      if verbose:
+      if VERBOSE:
         print("actors", attempt)
       for actor in (driver.find_elements(By.XPATH, "//div[@data-test-component= 'VideoModels']/a")):
         actors.append(actor.get_attribute("textContent"))
@@ -202,7 +202,7 @@ def page_scraper(driver, doc, getmaxtries: int = 1, findmaxtries: int = 1, verbo
   # categories
   for attempt in range(findmaxtries):
     try:
-      if verbose:
+      if VERBOSE:
         print("categories", attempt)
       for category in (driver.find_element(By.XPATH, "//html/head/meta[@name= 'keywords']").get_attribute("content").split(', ')):
         categories.append(category.title())
@@ -212,15 +212,15 @@ def page_scraper(driver, doc, getmaxtries: int = 1, findmaxtries: int = 1, verbo
     else:
       break
   
-  if verbose:
+  if VERBOSE:
     print("parsing completed")
 
   return doc
 
-def scraper(mongoUri = MONGODB_URI, mongoDB = MONGODB_DATABASE, sites = scrapeSites, useragent = SELENIUM_USERAGENT, command_executor = SELENIUM_URI, headless = SELENIUM_HEADLESS, driver_iwait: int = 10, verbose: bool = False):
+def scraper(mongoUri = MONGODB_URI, mongoDB = MONGODB_DATABASE, sites = scrapeSites, useragent = SELENIUM_USERAGENT, command_executor = SELENIUM_URI, headless = SELENIUM_HEADLESS, driver_iwait: int = 10):
   # mongodb connection
   try:
-    if verbose:
+    if VERBOSE:
       print("setting up db connection")
     db = dbase.init_db(mongoUri, mongoDB)
   except:
@@ -229,7 +229,7 @@ def scraper(mongoUri = MONGODB_URI, mongoDB = MONGODB_DATABASE, sites = scrapeSi
   
   # webdriver
   try:
-    if verbose:
+    if VERBOSE:
       print("starting webdriver")
     driver = wdriver.init_driver(command_executor = command_executor, useragent = useragent, driver_iwait = driver_iwait, headless =  headless)
   except:
@@ -248,7 +248,7 @@ def scraper(mongoUri = MONGODB_URI, mongoDB = MONGODB_DATABASE, sites = scrapeSi
       # find database entry without title
       try:
         doc = dbase.find_one_no_title(collection)
-        if verbose:
+        if VERBOSE:
           if doc == None:
             print("did not find entry without title")
             break
@@ -261,9 +261,9 @@ def scraper(mongoUri = MONGODB_URI, mongoDB = MONGODB_DATABASE, sites = scrapeSi
       # scrape page and update doc
       try:
         if doc != None:
-          doc = page_scraper(driver = driver, doc = doc, verbose = verbose)
+          doc = page_scraper(driver = driver, doc = doc)
         else:
-          if verbose:
+          if VERBOSE:
             print("finished page")
           break
       except:
@@ -273,17 +273,17 @@ def scraper(mongoUri = MONGODB_URI, mongoDB = MONGODB_DATABASE, sites = scrapeSi
       # update database entry
       try:
         dbase.upsert(collection = collection, doc = doc, key = "_id")
-        if verbose:
+        if VERBOSE:
           print("updated db entry")
       except:
         print("error updating database", collection)
-  if verbose:
+  if VERBOSE:
     print("sleeping for 30s")
     sleep(30)
   
   driver.quit()
 
-def discovery(mongoUri = MONGODB_URI, mongoDB = MONGODB_DATABASE, sites = discoverySites, useragent = SELENIUM_USERAGENT, command_executor = SELENIUM_URI, headless = SELENIUM_HEADLESS, maxPage = DISCOVERY_MAXPAGES, driver_iwait: int = 30, initPage: int = 1, verbose: bool = False):
+def discovery(mongoUri = MONGODB_URI, mongoDB = MONGODB_DATABASE, sites = discoverySites, useragent = SELENIUM_USERAGENT, command_executor = SELENIUM_URI, headless = SELENIUM_HEADLESS, maxPage = DISCOVERY_MAXPAGES, driver_iwait: int = 30, initPage: int = 1):
   # mongodb connection
   try:
     db = dbase.init_db(mongoUri, mongoDB)
@@ -300,7 +300,7 @@ def discovery(mongoUri = MONGODB_URI, mongoDB = MONGODB_DATABASE, sites = discov
   
   for site in sites:
     try:
-      wdriver.discover_site(db = db, driver = driver, site = site, maxPage = maxPage, navsleep = 1, verbose = verbose)
+      wdriver.discover_site(db = db, driver = driver, site = site, maxPage = maxPage, navsleep = 1)
     except:
       continue
   

@@ -8,114 +8,167 @@ import kink
 import mylf
 import vixen
 import wicked
-import variables
+from variables import VERBOSE
 
-def discoverSites(verbose: bool = False):
-  if verbose:
+def discoverSites():
+  if VERBOSE:
     print("#######################")
     print("# BEGINNING DISCOVERY #")
     print("#######################")
   
   try:
-    adulttime.discovery(verbose=verbose)
+    adulttime.discovery(VERBOSE)
   except:
     print("failed adulttime discovery")
   
   try:
-    bangbros.discovery(verbose=verbose)
+    bangbros.discovery(VERBOSE)
   except:
     print("failed bangbros discovery")
   
   try:
-    brazzers.discovery(verbose=verbose)
+    brazzers.discovery(VERBOSE)
   except:
     print("failed brazzers discovery")
   
   try:
-    genderx.discovery(verbose=verbose)
+    genderx.discovery(VERBOSE)
   except:
     print("failed genderx discovery")
   
   try:
-    kink.discovery(verbose=verbose)
+    kink.discovery(VERBOSE)
   except:
     print("failed kink discovery")
   
   try:
-    mylf.discovery(verbose=verbose)
+    mylf.discovery(VERBOSE)
   except:
     print("failed mylf discovery")
   
   try:
-    vixen.discovery(verbose=verbose)
+    vixen.discovery(VERBOSE)
   except:
     print("failed vixen discovery")
   
   try:
-    wicked.discovery(verbose=verbose)
+    wicked.discovery(VERBOSE)
   except:
     print("failed wicked discovery")
   
-  if verbose:
+  if VERBOSE:
     print("######################")
     print("# FINISHED DISCOVERY #")
     print("######################")
   
 
 
-def scrapeSites(verbose: bool = False):
-  if verbose:
+def scrapeSites():
+  if VERBOSE:
     print("######################")
     print("# BEGINNING SCRAPERS #")
     print("######################")
   
   try:
-    adulttime.scraper(verbose=verbose)
+    adulttime.scraper(VERBOSE)
   except:
     print("failed adulttime scraper")
   
   try:
-    bangbros.scraper(verbose=verbose)
+    bangbros.scraper(VERBOSE)
   except:
     print("failed bangbros scraper")
   
   try:
-    brazzers.scraper(verbose=verbose)
+    brazzers.scraper(VERBOSE)
   except:
     print("failed brazzers scraper")
   
   try:
-    genderx.scraper(verbose=verbose)
+    genderx.scraper(VERBOSE)
   except:
     print("failed genderx scraper")
   
   try:
-    kink.scraper(verbose=verbose)
+    kink.scraper(VERBOSE)
   except:
     print("failed kink scraper")
   
   try:
-    mylf.scraper(verbose=verbose)
+    mylf.scraper(VERBOSE)
   except:
     print("failed mylf scraper")
   
   try:
-    vixen.scraper(verbose=verbose)
+    vixen.scraper(VERBOSE)
   except:
     print("failed vixen scraper")
   
   try:
-    wicked.scraper(verbose=verbose)
+    wicked.scraper(VERBOSE)
   except:
     print("failed wicked scraper")
   
-  if verbose:
+  if VERBOSE:
     print("#####################")
     print("# FINISHED SCRAPERS #")
     print("#####################")
   
 
 
+def downloadPosters():
+  if VERBOSE:
+    print("################################")
+    print("# BEGINNING POSTER DOWNLOADERS #")
+    print("################################")
+  
+  # try:
+  #   adulttime.poster_downloader(VERBOSE)
+  # except:
+  #   print("failed adulttime poster_downloader")
+  
+  # try:
+  #   bangbros.poster_downloader(VERBOSE)
+  # except:
+  #   print("failed bangbros poster_downloader")
+  
+  # try:
+  #   brazzers.poster_downloader(VERBOSE)
+  # except:
+  #   print("failed brazzers poster_downloader")
+  
+  # try:
+  #   genderx.poster_downloader(VERBOSE)
+  # except:
+  #   print("failed genderx poster_downloader")
+  
+  try:
+    kink.poster_downloader(VERBOSE)
+  except:
+    print("failed kink poster_downloader")
+  
+  # try:
+  #   mylf.poster_downloader(VERBOSE)
+  # except:
+  #   print("failed mylf poster_downloader")
+  
+  # try:
+  #   vixen.poster_downloader(VERBOSE)
+  # except:
+  #   print("failed vixen poster_downloader")
+  
+  # try:
+  #   wicked.poster_downloader(VERBOSE)
+  # except:
+  #   print("failed wicked poster_downloader")
+  
+  if VERBOSE:
+    print("###############################")
+    print("# FINISHED POSTER DOWNLOADERS #")
+    print("###############################")
+  
+
+
 if __name__ == "__main__":
-  discoverSites(verbose=variables.VERBOSE)
-  scrapeSites(verbose=variables.VERBOSE)
+  discoverSites()
+  scrapeSites()
