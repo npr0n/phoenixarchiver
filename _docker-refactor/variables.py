@@ -14,15 +14,29 @@ DISCOVERY_MAXPAGES = int(os.getenv('DISCOVERY_MAXPAGES', "10"))
 
 VERBOSE = os.getenv('VERBOSE', True).lower() in ('true', 't', '1', '0')
 
-MEGA_USERNAME = os.getenv('MEGA_USERNAME', False)
-MEGA_PASSWORD = os.getenv('MEGA_PASSWORD', False)
-MEGA_KINK_U = os.getenv('MEGA_KINK_U', False)
-MEGA_KINK_P = os.getenv('MEGA_KINK_P', False)
-MEGA_MYLF_U = os.getenv('MEGA_MYLF_U', False)
-MEGA_MYLF_P = os.getenv('MEGA_MYLF_P', False)
 MEGA_ADUT_U = os.getenv('MEGA_ADUT_U', False)
 MEGA_ADUT_P = os.getenv('MEGA_ADUT_P', False)
+
+MEGA_BANG_U = os.getenv('MEGA_BANG_U', False)
+MEGA_BANG_P = os.getenv('MEGA_BANG_P', False)
+
 MEGA_BRAZ_U = os.getenv('MEGA_BRAZ_U', False)
 MEGA_BRAZ_P = os.getenv('MEGA_BRAZ_P', False)
+
+MEGA_GENX_U = os.getenv('MEGA_GENX_U', False)
+MEGA_GENX_P = os.getenv('MEGA_GENX_P', False)
+
+MEGA_KINK_U = os.getenv('MEGA_KINK_U', False)
+MEGA_KINK_P = os.getenv('MEGA_KINK_P', False)
+
+MEGA_MILE_U = os.getenv('MEGA_MILE_U', False)
+MEGA_MILE_P = os.getenv('MEGA_MILE_P', False)
+
+MEGA_MYLF_U = os.getenv('MEGA_MYLF_U', False)
+MEGA_MYLF_P = os.getenv('MEGA_MYLF_P', False)
+
 MEGA_VIXN_U = os.getenv('MEGA_VIXN_U', False)
 MEGA_VIXN_P = os.getenv('MEGA_VIXN_P', False)
+
+MEGA_WICK_U = os.getenv('MEGA_WICK_U', False)
+MEGA_WICK_P = os.getenv('MEGA_WICK_P', False)

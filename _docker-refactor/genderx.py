@@ -9,6 +9,7 @@ from selenium.common.exceptions import NoSuchElementException
 from selenium.common.exceptions import TimeoutException
 from urllib.parse import urlparse
 from time import sleep
+import poster
 
 scrapeSites = [
   "genderx"
@@ -35,6 +36,16 @@ def cookie_warn_close(driver):
   driver.get("https://www.genderxfilms.com/en/videos")
   sleep(10)
   driver.find_element(By.CLASS_NAME, "cookieConsentBtn").click()
+
+
+def poster_downloader(mongoUri = MONGODB_URI, mongoDB = MONGODB_DATABASE, sites = scrapeSites):
+  poster.mega_logout()
+  poster.mega_login(MEGA_GENX_U, MEGA_GENX_P)
+  for site in sites:
+    db = dbase.init_db(uri=mongoUri, database=mongoDB)
+    coll = db[site]
+    poster.collection_poster_downloader(collection=coll)
+  poster.mega_logout()
 
 
 def discovery(mongoUri = MONGODB_URI, mongoDB = MONGODB_DATABASE, sites = discoverySites, useragent = SELENIUM_USERAGENT, command_executor = SELENIUM_URI, headless = SELENIUM_HEADLESS, maxPage = DISCOVERY_MAXPAGES, driver_iwait: int = 30, initPage: int = 1):

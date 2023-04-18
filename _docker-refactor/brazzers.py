@@ -9,6 +9,7 @@ from selenium.common.exceptions import NoSuchElementException
 from selenium.common.exceptions import TimeoutException
 from urllib.parse import urlparse
 from time import sleep
+import poster
 
 scrapeSites = [
   "brazzers",
@@ -78,6 +79,16 @@ discoverySites = [
   "collection": "brazzers_collections"
 }
 ]
+
+
+def poster_downloader(mongoUri = MONGODB_URI, mongoDB = MONGODB_DATABASE, sites = scrapeSites):
+  poster.mega_logout()
+  poster.mega_login(MEGA_BRAZ_U, MEGA_BRAZ_P)
+  for site in sites:
+    db = dbase.init_db(uri=mongoUri, database=mongoDB)
+    coll = db[site]
+    poster.collection_poster_downloader(collection=coll)
+  poster.mega_logout()
 
 
 def discovery(mongoUri = MONGODB_URI, mongoDB = MONGODB_DATABASE, sites = discoverySites, useragent = SELENIUM_USERAGENT, command_executor = SELENIUM_URI, headless = SELENIUM_HEADLESS, maxPage = DISCOVERY_MAXPAGES, driver_iwait: int = 30, initPage: int = 1, scrollOffset: int = 50):
