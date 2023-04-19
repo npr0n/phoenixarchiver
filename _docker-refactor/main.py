@@ -133,10 +133,10 @@ def downloadPosters():
   # except:
   #   print("failed bangbros poster_downloader")
   
-  # try:
-  #   brazzers.poster_downloader(VERBOSE)
-  # except:
-  #   print("failed brazzers poster_downloader")
+  try:
+    brazzers.poster_downloader(VERBOSE)
+  except:
+    print("failed brazzers poster_downloader")
   
   # try:
   #   genderx.poster_downloader(VERBOSE)
@@ -171,6 +171,6 @@ def downloadPosters():
 
 
 if __name__ == "__main__":
-  print(f"MONGODB_URI: {MONGODB_URI}")
   discoverSites()
   scrapeSites()
+  downloadPosters()
