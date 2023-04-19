@@ -8,7 +8,7 @@ RUN wget https://mega.nz/linux/repo/Debian_11/amd64/megacmd-Debian_11_amd64.deb 
 
 COPY * /app
 RUN python3 -m venv /app/venv
-RUN /app/venv/bin/python3 -m pip install --no-cache-dir /app/requirements.txt
+RUN /app/venv/bin/python3 -m pip install --no-cache-dir -r /app/requirements.txt
 
 COPY crontab /etc/cron.d/crontab
 RUN chmod 0644 /etc/cron.d/crontab
