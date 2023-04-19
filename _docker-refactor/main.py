@@ -122,10 +122,10 @@ def downloadPosters():
     print("# BEGINNING POSTER DOWNLOADERS #")
     print("################################")
   
-  # try:
-  #   adulttime.poster_downloader(VERBOSE)
-  # except:
-  #   print("failed adulttime poster_downloader")
+  try:
+    adulttime.poster_downloader(VERBOSE)
+  except:
+    print("failed adulttime poster_downloader")
   
   # try:
   #   bangbros.poster_downloader(VERBOSE)
