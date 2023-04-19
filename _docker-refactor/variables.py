@@ -12,7 +12,7 @@ MONGODB_DATABASE = os.getenv('MONGODB_DATABASE', "phoenixarchive")
 
 DISCOVERY_MAXPAGES = int(os.getenv('DISCOVERY_MAXPAGES', "10"))
 
-VERBOSE = os.getenv('VERBOSE', True).lower() in ('true', 't', '1', '0')
+VERBOSE = os.getenv('VERBOSE', "True").lower() in ('true', 't', '1', '0')
 
 MEGA_ADUT_U = os.getenv('MEGA_ADUT_U', False)
 MEGA_ADUT_P = os.getenv('MEGA_ADUT_P', False)

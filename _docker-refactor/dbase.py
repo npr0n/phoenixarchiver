@@ -7,7 +7,11 @@ import pymongo.errors
 
 def init_db(uri: str, database: str):
   client = MongoClient(uri)
+  if VERBOSE:
+    print(f"dbclient: {client}")
   db = client.get_database(database)
+  if VERBOSE:
+    print(f"db: {db}")
   return db
 
 def init_default_db(uri = MONGODB_URI, database = MONGODB_DATABASE):

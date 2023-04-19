@@ -29,11 +29,11 @@ discoverySites = [
 }
 ]
 
-def poster_downloader(mongoUri = MONGODB_URI, mongoDB = MONGODB_DATABASE, sites = scrapeSites):
+def poster_downloader(sites = scrapeSites):
   poster.mega_logout()
   poster.mega_login(MEGA_BANG_U, MEGA_BANG_P)
   for site in sites:
-    db = dbase.init_db(uri=mongoUri, database=mongoDB)
+    db = dbase.init_db(uri=MONGODB_URI, database=MONGODB_DATABASE)
     coll = db[site]
     poster.collection_poster_downloader(collection=coll)
   poster.mega_logout()
@@ -154,12 +154,12 @@ def page_scraper(driver, doc, getmaxtries: int = 1, findmaxtries: int = 1):
   return doc
 
 
-def scraper(mongoUri = MONGODB_URI, mongoDB = MONGODB_DATABASE, sites = scrapeSites, useragent = SELENIUM_USERAGENT, command_executor = SELENIUM_URI, headless = SELENIUM_HEADLESS, driver_iwait: int = 10):
+def scraper(sites = scrapeSites, useragent = SELENIUM_USERAGENT, command_executor = SELENIUM_URI, headless = SELENIUM_HEADLESS, driver_iwait: int = 10):
   # mongodb connection
   try:
     if VERBOSE:
       print("setting up db connection")
-    db = dbase.init_db(mongoUri, mongoDB)
+    db = dbase.init_db(MONGODB_URI, MONGODB_DATABASE)
   except:
     print("error setting up db connection")
     return 1
@@ -220,10 +220,10 @@ def scraper(mongoUri = MONGODB_URI, mongoDB = MONGODB_DATABASE, sites = scrapeSi
   
   driver.quit()
 
-def discovery(mongoUri = MONGODB_URI, mongoDB = MONGODB_DATABASE, sites = discoverySites, useragent = SELENIUM_USERAGENT, command_executor = SELENIUM_URI, headless = SELENIUM_HEADLESS, maxPage = DISCOVERY_MAXPAGES, driver_iwait: int = 30, initPage: int = 1):
+def discovery(sites = discoverySites, useragent = SELENIUM_USERAGENT, command_executor = SELENIUM_URI, headless = SELENIUM_HEADLESS, maxPage = DISCOVERY_MAXPAGES, driver_iwait: int = 30, initPage: int = 1):
   # mongodb connection
   try:
-    db = dbase.init_db(mongoUri, mongoDB)
+    db = dbase.init_db(uri=MONGODB_URI, database=MONGODB_DATABASE)
   except:
     print("error setting up db connection")
     return 1

@@ -1,13 +1,10 @@
 #!/bin/bash
-if [ -f /app/.env ]
-then
-  source /app/.env
-fi
-
 echo "setting up environment variables for cron"
 printenv > /etc/environment
-echo PYTHONPATH=/usr/local/lib/python >> /etc/environment
-echo ""
+if [ -f /app/.env ]
+then
+  cat /app/.env >> /etc/environment
+fi
 cat /etc/environment
 
 

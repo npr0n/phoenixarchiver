@@ -9,6 +9,7 @@ import mylf
 import vixen
 import wicked
 from variables import VERBOSE
+from variables import *
 
 def discoverSites():
   if VERBOSE:
@@ -170,5 +171,6 @@ def downloadPosters():
 
 
 if __name__ == "__main__":
+  print(f"MONGODB_URI: {MONGODB_URI}")
   discoverSites()
   scrapeSites()

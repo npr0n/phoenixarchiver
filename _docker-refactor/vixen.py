@@ -74,11 +74,11 @@ discoverySites = [
 }
 ]
 
-def poster_downloader(mongoUri = MONGODB_URI, mongoDB = MONGODB_DATABASE, sites = scrapeSites):
+def poster_downloader(sites = scrapeSites):
   poster.mega_logout()
   poster.mega_login(MEGA_VIXN_U, MEGA_VIXN_P)
   for site in sites:
-    db = dbase.init_db(uri=mongoUri, database=mongoDB)
+    db = dbase.init_db(uri=MONGODB_URI, database=MONGODB_DATABASE)
     coll = db[site]
     poster.collection_poster_downloader(collection=coll)
   poster.mega_logout()
@@ -226,12 +226,12 @@ def page_scraper(driver, doc, getmaxtries: int = 1, findmaxtries: int = 1):
 
   return doc
 
-def scraper(mongoUri = MONGODB_URI, mongoDB = MONGODB_DATABASE, sites = scrapeSites, useragent = SELENIUM_USERAGENT, command_executor = SELENIUM_URI, headless = SELENIUM_HEADLESS, driver_iwait: int = 10):
+def scraper(sites = scrapeSites, driver_iwait: int = 10):
   # mongodb connection
   try:
     if VERBOSE:
       print("setting up db connection")
-    db = dbase.init_db(mongoUri, mongoDB)
+    db = dbase.init_db(uri=MONGODB_URI, database=MONGODB_DATABASE)
   except:
     print("error setting up db connection")
     return 1
@@ -240,7 +240,7 @@ def scraper(mongoUri = MONGODB_URI, mongoDB = MONGODB_DATABASE, sites = scrapeSi
   try:
     if VERBOSE:
       print("starting webdriver")
-    driver = wdriver.init_driver(command_executor = command_executor, useragent = useragent, driver_iwait = driver_iwait, headless =  headless)
+    driver = wdriver.init_driver(command_executor = SELENIUM_URI, useragent = SELENIUM_USERAGENT, driver_iwait = driver_iwait, headless = SELENIUM_HEADLESS)
   except:
     print("error setting up webdriver")
     return 1
@@ -292,24 +292,24 @@ def scraper(mongoUri = MONGODB_URI, mongoDB = MONGODB_DATABASE, sites = scrapeSi
   
   driver.quit()
 
-def discovery(mongoUri = MONGODB_URI, mongoDB = MONGODB_DATABASE, sites = discoverySites, useragent = SELENIUM_USERAGENT, command_executor = SELENIUM_URI, headless = SELENIUM_HEADLESS, maxPage = DISCOVERY_MAXPAGES, driver_iwait: int = 30, initPage: int = 1):
+def discovery(sites = discoverySites, driver_iwait: int = 30):
   # mongodb connection
   try:
-    db = dbase.init_db(mongoUri, mongoDB)
+    db = dbase.init_db(uri=MONGODB_URI, database=MONGODB_DATABASE)
   except:
     print("error setting up db connection")
     return 1
   
   # webdriver
   try:
-    driver = wdriver.init_driver(command_executor = command_executor, useragent = useragent, driver_iwait = driver_iwait, headless = headless)
+    driver = wdriver.init_driver(command_executor = SELENIUM_URI, useragent = SELENIUM_USERAGENT, driver_iwait = driver_iwait, headless = SELENIUM_HEADLESS)
   except:
     print("error setting up webdriver")
     return 1
   
   for site in sites:
     try:
-      wdriver.discover_site(db = db, driver = driver, site = site, maxPage = maxPage, navsleep = 1)
+      wdriver.discover_site(db = db, driver = driver, site = site, maxPage = DISCOVERY_MAXPAGES, navsleep = 1)
     except:
       continue
   
