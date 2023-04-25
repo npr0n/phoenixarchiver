@@ -19,9 +19,9 @@ def mega_login(username: str, password: str):
 
 def mega_logout():
   if VERBOSE:
-    subprocess.run("mega-logout", stdout=subprocess.DEVNULL)
+    subprocess.run("mega-quit", stdout=subprocess.DEVNULL)
   else:
-    subprocess.run("mega-logout", stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+    subprocess.run("mega-quit", stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
 
 def mega_upload_file(source: os.PathLike, target: str):
   if VERBOSE:
