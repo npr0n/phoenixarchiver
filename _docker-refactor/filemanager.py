@@ -9,7 +9,8 @@ invalid_chars = [ "'", '"', ",", ";", ":", "!", "?", "<", ">", "|", "%", "&" ]
 # chars that get replaced with underscores
 replace_chars = [ " " ]
 
-def normalizeFullPath(path: pathlib.Path):
+def normalizeFullPath(path):
+  path = pathlib.Path(path)
   p = str(path)
   for char in invalid_chars:
     p = p.replace(char, "")
@@ -18,10 +19,3 @@ def normalizeFullPath(path: pathlib.Path):
   path = pathlib.Path(p)
   return path
 
-def findDirHigherResolution(path: pathlib.Path):
-  p = str(path)
-  resolutions = [ "720p", "1080p", "2160p" ]
-  for res in resolutions:
-    if res in p:
-      basename = path.name.split(res)[0]
-      print(basename, res)
